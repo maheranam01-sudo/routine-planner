@@ -1543,6 +1543,8 @@ const AppSync = {
   },
 
   async saveToCloud() {
+    if (this.isSyncing) return; // ADDED: Prevent echoing back to the server
+
     this.localVersion = Date.now(); // Stamp this save with the exact millisecond
 
     const fullState = {
@@ -1571,6 +1573,8 @@ const AppSync = {
   },
 
   applyState(data) {
+    this.isSyncing = true; // ADDED: Lock saving while processing incoming data
+
     if (data.planner) {
       currentWake = data.planner.wake || '06:00';
       currentMood = data.planner.mood || 'ok';
@@ -1606,6 +1610,8 @@ const AppSync = {
     if (data.revision && typeof RevisionSystem !== 'undefined') RevisionSystem.state = data.revision;
 
     this.reRenderAll();
+    
+    this.isSyncing = false; // ADDED: Unlock saving once rendering is complete
   },
 
   reRenderAll() {
