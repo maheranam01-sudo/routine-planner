@@ -1527,52 +1527,49 @@ const AppSync = {
       console.warn("Supabase import failed. Running in offline mode.", e);
     }
 
-    await this.loadFromCloud();
+    this.loadFromCloud(); // Intentionally no longer using 'await' here
     if (this.client) this.subscribe();
   },
 
-  async loadFromCloud() {
-    // 1. Fetch from Local Storage instantly
+  loadFromCloud() {
+    // 1. Fetch & Apply Local Storage INSTANTLY (Optimistic UI Load)
     const localRaw = localStorage.getItem('maher_planner_state');
     let localData = null;
+    
     if (localRaw) {
-      try { localData = JSON.parse(localRaw); } catch(e) {}
-    }
-
-    // 2. Fetch from Cloud asynchronously
-    let cloudData = null;
-    if (this.client) {
-      try {
-        const { data } = await this.client.from('planner_state').select('data').eq('id', 'maher').single();
-        if (data && data.data) cloudData = data.data;
-      } catch (e) {
-        console.warn("Could not fetch cloud data.", e);
-      }
-    }
-
-    // 3. Resolve best data based on version timestamp
-    let finalData = null;
-    const localVer = localData ? (localData.version || 0) : 0;
-    const cloudVer = cloudData ? (cloudData.version || 0) : 0;
-
-    if (cloudVer > localVer && cloudData) {
-      finalData = cloudData;
-      localStorage.setItem('maher_planner_state', JSON.stringify(cloudData)); // Keep local updated
-    } else if (localData) {
-      finalData = localData;
-      // Push local data up to cloud if local is ahead
-      if (this.client && localVer > cloudVer) {
-        setTimeout(() => this.saveToCloud(), 1000); 
-      }
-    }
-
-    // 4. Apply State
-    if (finalData) {
-      this.localVersion = finalData.version || 0;
-      this.applyState(finalData);
+      try { 
+        localData = JSON.parse(localRaw); 
+        this.localVersion = localData.version || 0;
+        this.applyState(localData); // Instant UI Paint
+      } catch(e) {}
     } else {
-      await this.saveToCloud(); // First time ever load
-      this.reRenderAll();
+      this.reRenderAll(); // Paint default state if absolute first load
+    }
+
+    // 2. Fetch from Cloud asynchronously (in the background)
+    if (this.client) {
+      this.client.from('planner_state').select('data').eq('id', 'maher').single()
+        .then(({ data, error }) => {
+          if (data && data.data) {
+            const cloudData = data.data;
+            const cloudVer = cloudData.version || 0;
+            const localVer = this.localVersion || 0;
+
+            if (cloudVer > localVer) {
+              // Cloud has newer data, quietly update UI
+              this.localVersion = cloudVer;
+              localStorage.setItem('maher_planner_state', JSON.stringify(cloudData));
+              this.applyState(cloudData);
+            } else if (localVer > cloudVer) {
+              // Local is newer, push to cloud
+              setTimeout(() => this.saveToCloud(), 1000);
+            }
+          } else if (!localData && !error) {
+            // First time setup ever
+            this.saveToCloud();
+          }
+        })
+        .catch(e => console.warn("Background cloud sync failed.", e));
     }
   },
 
@@ -1603,7 +1600,6 @@ const AppSync = {
     };
 
     // DUAL WRITE: Always persist synchronously locally first. 
-    // This entirely solves data loss from refreshing before Supabase finishes writing.
     localStorage.setItem('maher_planner_state', JSON.stringify(fullState));
 
     // Async push to Supabase
@@ -1634,7 +1630,6 @@ const AppSync = {
         this.blockNotesTemp = Array.isArray(data.planner.blockNotes) ? data.planner.blockNotes : [];
       }
 
-      // Safe deep merge to prevent mapping crashes from missing arrays in old saves
       if (data.engine && typeof Engine !== 'undefined') {
         Engine.state.lastResetDate = data.engine.lastResetDate || Engine.state.lastResetDate;
         Engine.state.habits = data.engine.habits || Engine.state.habits;
@@ -1676,7 +1671,7 @@ const AppSync = {
     } catch (e) {
       console.error("Hydration Crash Detected (prevented app lock):", e);
     } finally {
-      this.isSyncing = false; // Guaranteed to execute no matter what
+      this.isSyncing = false; 
     }
   },
 
@@ -1746,37 +1741,43 @@ let prayerTimes = {
 };
 
 // =============================================
-// GLOBAL INIT
+// GLOBAL INIT (Non-Blocking)
 // =============================================
-window.addEventListener('load', async () => {
-  try {
-    await AppSync.init();
-  } catch (e) {
-    console.error("Initialization error:", e);
+window.addEventListener('load', () => {
+  
+  // 1. INSTANT TAB RESTORATION
+  const lastTab = localStorage.getItem('maher_active_tab') || 'schedule';
+  const tabBtn = document.querySelector(`.tab-btn[onclick*="'${lastTab}'"]`);
+  if (tabBtn) {
+    document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById(`tab-${lastTab}`).classList.add('active');
+    tabBtn.classList.add('active');
   }
 
+  // 2. SET UP CORE UI
   updateClock();
   setInterval(updateClock, 1000);
   setInterval(updateActiveBlock, 60000);
   renderDayDate();
-
-  await fetchPrayerTimes();
+  renderDopamineRules();
 
   if (typeof Engine !== 'undefined') {
     Engine.checkReset();
     setInterval(() => Engine.checkReset(), 60000);
-    Engine.renderAll();
   }
   if (typeof GrowthSystem !== 'undefined') GrowthSystem.init();
   if (typeof GoalsSystem !== 'undefined') GoalsSystem.init();
   if (typeof ReviewSystem !== 'undefined') ReviewSystem.init();
   if (typeof RevisionSystem !== 'undefined') RevisionSystem.init();
   
-  renderDopamineRules(); 
+  // 3. START BACKGROUND ASYNC TASKS (These no longer block the UI)
+  fetchPrayerTimes();
+  AppSync.init().then(() => {
+    // Fire the switch event just in case specific modules needed data first
+    if (tabBtn) window.switchTab(lastTab, tabBtn);
+  }).catch(e => console.error("Initialization error:", e));
 
-  const lastTab = localStorage.getItem('maher_active_tab') || 'schedule';
-  const tabBtn = document.querySelector(`.tab-btn[onclick*="'${lastTab}'"]`);
-  if (tabBtn) window.switchTab(lastTab, tabBtn);
 });
 
 function loadStorage() { }
