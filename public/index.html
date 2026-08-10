@@ -1513,9 +1513,9 @@ select option { background: var(--surface2); }
 const AppSync = {
   client: null,
   isSyncing: false,
-  localVersion: 0,
-  blockNotesTemp: [],
-  hasHydrated: false, // Prevents race-condition saves
+  hasHydrated: false,
+  mySessionId: Math.random().toString(36).substring(2, 15),
+  pendingSave: false,
 
   init() {
     // 1. Instantly read local storage so the state is hydrated BEFORE any saves can happen
@@ -1530,7 +1530,6 @@ const AppSync = {
     if (localRaw) {
       try {
         const localData = JSON.parse(localRaw);
-        this.localVersion = localData.version || 0;
         this.applyState(localData);
       } catch(e) {
         console.error("Local storage parsing failed", e);
@@ -1560,19 +1559,17 @@ const AppSync = {
     if (!this.client) return;
     this.client.from('planner_state').select('data').eq('id', 'maher').single()
       .then(({ data, error }) => {
-        if (data && data.data) {
+        if (this.pendingSave) {
+          // The user made a change while Supabase was loading. Push our local state to the cloud.
+          this.saveToCloud();
+          this.pendingSave = false;
+        } else if (data && data.data) {
+          // No local changes were made. Safely pull down cloud data to ensure cross-device sync.
           const cloudData = data.data;
-          const cloudVer = cloudData.version || 0;
-          const localVer = this.localVersion || 0;
-
-          if (cloudVer > localVer) {
-            this.localVersion = cloudVer;
-            localStorage.setItem('maher_planner_state', JSON.stringify(cloudData));
-            this.applyState(cloudData);
-          } else if (localVer > cloudVer) {
-            setTimeout(() => this.saveToCloud(), 1000);
-          }
-        } else if (!this.localVersion && !error) {
+          localStorage.setItem('maher_planner_state', JSON.stringify(cloudData));
+          this.applyState(cloudData);
+        } else if (!error) {
+          // First time ever saving to DB
           this.saveToCloud();
         }
       })
@@ -1582,10 +1579,8 @@ const AppSync = {
   async saveToCloud() {
     if (this.isSyncing || !this.hasHydrated) return; // Crucial lock
 
-    this.localVersion = Date.now(); 
-
     const fullState = {
-      version: this.localVersion,
+      session_id: this.mySessionId,
       planner: {
         wake: currentWake,
         mood: currentMood,
@@ -1609,6 +1604,8 @@ const AppSync = {
 
     if (this.client) {
       this.client.from('planner_state').upsert({ id: 'maher', data: fullState }).catch(e => console.warn(e));
+    } else {
+      this.pendingSave = true;
     }
   },
 
@@ -1715,9 +1712,13 @@ const AppSync = {
     this.client.channel('planner_sync')
       .on('postgres_changes', { event: '*', schema: 'public', table: 'planner_state' }, payload => {
         if (payload.new && payload.new.data) {
-          const incomingVersion = payload.new.data.version || 0;
-          if (incomingVersion <= this.localVersion) return;
-          this.localVersion = incomingVersion;
+          const incomingSessionId = payload.new.data.session_id;
+          
+          // If the data came from THIS very browser tab, ignore it to prevent UI flickering/echoes
+          if (incomingSessionId === this.mySessionId) return;
+          
+          // Data came from a different device (phone vs PC). Apply it instantly!
+          localStorage.setItem('maher_planner_state', JSON.stringify(payload.new.data));
           this.applyState(payload.new.data);
         }
       })
