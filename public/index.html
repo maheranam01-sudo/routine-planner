@@ -1515,66 +1515,72 @@ const AppSync = {
   isSyncing: false,
   localVersion: 0,
   blockNotesTemp: [],
+  hasHydrated: false, // Prevents race-condition saves
 
-  async init() {
+  init() {
+    // 1. Instantly read local storage so the state is hydrated BEFORE any saves can happen
+    this.loadLocalInstantly();
+
+    // 2. Start the slow Supabase import in the background
+    this.connectCloud();
+  },
+
+  loadLocalInstantly() {
+    const localRaw = localStorage.getItem('maher_planner_state');
+    if (localRaw) {
+      try {
+        const localData = JSON.parse(localRaw);
+        this.localVersion = localData.version || 0;
+        this.applyState(localData);
+      } catch(e) {
+        console.error("Local storage parsing failed", e);
+        this.reRenderAll();
+      }
+    } else {
+      this.reRenderAll();
+    }
+    this.hasHydrated = true;
+  },
+
+  async connectCloud() {
     try {
       const { createClient } = await import('https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm');
       this.client = createClient(
         'https://bjnexvtnauiseehorfaq.supabase.co',
         'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJqbmV4dnRuYXVpc2VlaG9yZmFxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg4NDQyMjAsImV4cCI6MjA5NDQyMDIyMH0.lsRBa4gNnzIOyF_mw6xK4MXHR134I0qYPd_ICQQXWVM'
       );
+      this.syncWithCloud();
+      this.subscribe();
     } catch (e) {
-      console.warn("Supabase import failed. Running in offline mode.", e);
+      console.warn("Supabase import failed. Running strictly offline.", e);
     }
-
-    this.loadFromCloud(); // Intentionally no longer using 'await' here
-    if (this.client) this.subscribe();
   },
 
-  loadFromCloud() {
-    // 1. Fetch & Apply Local Storage INSTANTLY (Optimistic UI Load)
-    const localRaw = localStorage.getItem('maher_planner_state');
-    let localData = null;
-    
-    if (localRaw) {
-      try { 
-        localData = JSON.parse(localRaw); 
-        this.localVersion = localData.version || 0;
-        this.applyState(localData); // Instant UI Paint
-      } catch(e) {}
-    } else {
-      this.reRenderAll(); // Paint default state if absolute first load
-    }
+  syncWithCloud() {
+    if (!this.client) return;
+    this.client.from('planner_state').select('data').eq('id', 'maher').single()
+      .then(({ data, error }) => {
+        if (data && data.data) {
+          const cloudData = data.data;
+          const cloudVer = cloudData.version || 0;
+          const localVer = this.localVersion || 0;
 
-    // 2. Fetch from Cloud asynchronously (in the background)
-    if (this.client) {
-      this.client.from('planner_state').select('data').eq('id', 'maher').single()
-        .then(({ data, error }) => {
-          if (data && data.data) {
-            const cloudData = data.data;
-            const cloudVer = cloudData.version || 0;
-            const localVer = this.localVersion || 0;
-
-            if (cloudVer > localVer) {
-              // Cloud has newer data, quietly update UI
-              this.localVersion = cloudVer;
-              localStorage.setItem('maher_planner_state', JSON.stringify(cloudData));
-              this.applyState(cloudData);
-            } else if (localVer > cloudVer) {
-              // Local is newer, push to cloud
-              setTimeout(() => this.saveToCloud(), 1000);
-            }
-          } else if (!localData && !error) {
-            // First time setup ever
-            this.saveToCloud();
+          if (cloudVer > localVer) {
+            this.localVersion = cloudVer;
+            localStorage.setItem('maher_planner_state', JSON.stringify(cloudData));
+            this.applyState(cloudData);
+          } else if (localVer > cloudVer) {
+            setTimeout(() => this.saveToCloud(), 1000);
           }
-        })
-        .catch(e => console.warn("Background cloud sync failed.", e));
-    }
+        } else if (!this.localVersion && !error) {
+          this.saveToCloud();
+        }
+      })
+      .catch(e => console.warn("Background cloud sync failed.", e));
   },
 
   async saveToCloud() {
-    if (this.isSyncing) return;
+    if (this.isSyncing || !this.hasHydrated) return; // Crucial lock
 
     this.localVersion = Date.now(); 
 
@@ -1599,10 +1605,8 @@ const AppSync = {
       revision: typeof RevisionSystem !== 'undefined' ? RevisionSystem.state : null
     };
 
-    // DUAL WRITE: Always persist synchronously locally first. 
     localStorage.setItem('maher_planner_state', JSON.stringify(fullState));
 
-    // Async push to Supabase
     if (this.client) {
       this.client.from('planner_state').upsert({ id: 'maher', data: fullState }).catch(e => console.warn(e));
     }
@@ -1669,7 +1673,7 @@ const AppSync = {
 
       this.reRenderAll();
     } catch (e) {
-      console.error("Hydration Crash Detected (prevented app lock):", e);
+      console.error("Hydration Crash Detected:", e);
     } finally {
       this.isSyncing = false; 
     }
@@ -1741,10 +1745,9 @@ let prayerTimes = {
 };
 
 // =============================================
-// GLOBAL INIT (Non-Blocking)
+// GLOBAL INIT
 // =============================================
 window.addEventListener('load', () => {
-  
   // 1. INSTANT TAB RESTORATION
   const lastTab = localStorage.getItem('maher_active_tab') || 'schedule';
   const tabBtn = document.querySelector(`.tab-btn[onclick*="'${lastTab}'"]`);
@@ -1755,7 +1758,10 @@ window.addEventListener('load', () => {
     tabBtn.classList.add('active');
   }
 
-  // 2. SET UP CORE UI
+  // 2. SYNCHRONOUS HYDRATION
+  AppSync.init();
+
+  // 3. SET UP CORE UI
   updateClock();
   setInterval(updateClock, 1000);
   setInterval(updateActiveBlock, 60000);
@@ -1771,13 +1777,8 @@ window.addEventListener('load', () => {
   if (typeof ReviewSystem !== 'undefined') ReviewSystem.init();
   if (typeof RevisionSystem !== 'undefined') RevisionSystem.init();
   
-  // 3. START BACKGROUND ASYNC TASKS (These no longer block the UI)
+  // 4. ASYNC FETCHES
   fetchPrayerTimes();
-  AppSync.init().then(() => {
-    // Fire the switch event just in case specific modules needed data first
-    if (tabBtn) window.switchTab(lastTab, tabBtn);
-  }).catch(e => console.error("Initialization error:", e));
-
 });
 
 function loadStorage() { }
