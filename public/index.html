@@ -44,6 +44,7 @@ body {
   overflow-x: hidden;
 }
 
+/* Subtle background texture */
 body::before {
   content: '';
   position: fixed;
@@ -301,6 +302,7 @@ body::before {
 .tl-block[data-tag="high"] .tl-dot { border-color: var(--sky); background: rgba(107,173,212,0.1); }
 .tl-block[data-tag="med"] .tl-dot { border-color: #a89060; }
 
+/* User event blocks (fixed events woven into schedule) */
 .tl-block[data-isevent="true"] .tl-dot {
   border-color: var(--sky);
   background: rgba(107,173,212,0.25);
@@ -368,6 +370,7 @@ body::before {
 .tag-med { background: rgba(168,144,96,0.1); color: #a89060; border: 1px solid rgba(168,144,96,0.15); }
 .tag-high { background: rgba(107,173,212,0.08); color: var(--sky); border: 1px solid rgba(107,173,212,0.12); }
 
+/* ACTIVE BLOCK HIGHLIGHT */
 .tl-block.is-active {
   background: rgba(200,169,110,0.04);
   border-left: 2px solid var(--gold);
@@ -375,10 +378,12 @@ body::before {
   margin-left: -2px;
 }
 
+/* DONE BLOCK */
 .tl-block.is-done .tl-title { text-decoration: line-through; color: var(--text3); }
 .tl-block.is-done .tl-dot { opacity: 0.3; }
 .tl-block.is-done { opacity: 0.5; }
 
+/* BLOCK ACTIONS */
 .blk-actions-panel {
   display: none;
   background: var(--surface2);
@@ -409,6 +414,7 @@ body::before {
 .act-btn.danger:hover { background: rgba(212,117,106,0.08); }
 .act-btn.gold { color: var(--gold); border-color: var(--gold-dim); }
 
+/* DUR EDITOR */
 .dur-editor {
   display: none;
   align-items: center;
@@ -440,6 +446,7 @@ body::before {
   text-align: center;
 }
 
+/* REPLACE FORM */
 .replace-form {
   display: none;
   flex-direction: column;
@@ -452,6 +459,7 @@ body::before {
 
 .replace-form.open { display: flex; }
 
+/* INPUTS */
 input[type="text"], input[type="time"], input[type="number"], textarea, select, input[type="password"] {
   background: var(--surface2);
   border: 1px solid var(--border);
@@ -469,6 +477,7 @@ input:focus, textarea:focus, select:focus { border-color: var(--gold-dim); }
 textarea { resize: vertical; min-height: 70px; }
 select option { background: var(--surface2); }
 
+/* PROGRESS BAR */
 .prog-wrap {
   height: 3px;
   background: var(--surface3);
@@ -495,6 +504,7 @@ select option { background: var(--surface2); }
   justify-content: space-between;
 }
 
+/* REBUILD BUTTON */
 .rebuild-btn {
   margin: 0 16px 16px;
   padding: 12px;
@@ -512,6 +522,7 @@ select option { background: var(--surface2); }
 
 .rebuild-btn:hover { border-color: var(--gold-dim); color: var(--gold); }
 
+/* WAKE TIME CONTROL */
 .wake-control {
   display: flex;
   align-items: center;
@@ -560,6 +571,21 @@ select option { background: var(--surface2); }
 }
 
 .mood-pill.sel { border-color: var(--gold-dim); color: var(--gold); background: rgba(200,169,110,0.08); }
+
+/* DAY NOTE */
+.day-note {
+  margin: 0 16px 12px;
+  padding: 12px 14px;
+  background: rgba(200,169,110,0.04);
+  border: 1px solid rgba(200,169,110,0.12);
+  border-radius: 10px;
+  font-size: 12px;
+  color: var(--text2);
+  line-height: 1.6;
+  font-style: italic;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 15px;
+}
 
 /* TASK MANAGER */
 .task-group { margin-bottom: 16px; }
@@ -613,19 +639,68 @@ select option { background: var(--surface2); }
 .pri-btn.sel-med { border-color: var(--gold-dim); color: var(--gold); background: rgba(200,169,110,0.06); }
 .pri-btn.sel-low { border-color: var(--teal-dim); color: var(--teal); background: rgba(74,184,160,0.06); }
 
-/* ENGINE TRACKING */
+/* AI ADAPT TAB */
+.ai-header { padding: 20px 20px 12px; }
+.ai-header h2 { font-family: 'Cormorant Garamond', serif; font-size: 26px; color: var(--text); }
+.ai-header p { font-size: 12px; color: var(--text3); margin-top: 4px; line-height: 1.5; }
+.preset-row { display: flex; gap: 6px; padding: 0 16px; margin-bottom: 14px; overflow-x: auto; scrollbar-width: none; }
+.preset-row::-webkit-scrollbar { display: none; }
+.preset-btn { flex-shrink: 0; padding: 8px 12px; background: var(--surface); border: 1px solid var(--border); border-radius: 20px; color: var(--text2); font-family: 'DM Mono', monospace; font-size: 10px; cursor: pointer; transition: all 0.2s; white-space: nowrap; }
+.preset-btn:hover { border-color: var(--gold-dim); color: var(--gold); }
+.ai-chat { padding: 0 16px; margin-bottom: 12px; max-height: 350px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; }
+.ai-msg { padding: 12px 14px; border-radius: 10px; font-size: 13px; line-height: 1.6; animation: fadeUp 0.3s ease; }
+.ai-msg.user { background: var(--surface2); border: 1px solid var(--border); color: var(--text); align-self: flex-end; max-width: 85%; }
+.ai-msg.assistant { background: rgba(200,169,110,0.05); border: 1px solid rgba(200,169,110,0.1); color: var(--text2); align-self: flex-start; max-width: 95%; }
+.ai-msg.loading { background: var(--surface); border: 1px solid var(--border); color: var(--text3); }
+.ai-input-row { margin: 0 16px; display: flex; gap: 8px; }
+.ai-input-row textarea { flex: 1; min-height: 44px; max-height: 120px; resize: none; padding: 10px 12px; }
+.ai-send-btn { width: 44px; height: 44px; background: var(--gold); border: none; border-radius: 8px; color: #080c0b; font-size: 18px; cursor: pointer; flex-shrink: 0; display: flex; align-items: center; justify-content: center; transition: opacity 0.2s; }
+.ai-send-btn:hover { opacity: 0.85; }
+.ai-send-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+.ai-approve-row { display: flex; gap: 8px; margin-top: 10px; flex-wrap: wrap; }
+.ai-approve-btn { padding: 8px 16px; background: var(--teal); border: none; border-radius: 8px; color: #080c0b; font-family: 'DM Mono', monospace; font-size: 11px; font-weight: 500; cursor: pointer; transition: opacity 0.2s; }
+.ai-approve-btn:hover { opacity: 0.85; }
+.ai-approved-badge { padding: 8px 16px; background: rgba(74,184,160,0.1); border: 1px solid var(--teal-dim); border-radius: 8px; color: var(--teal); font-family: 'DM Mono', monospace; font-size: 11px; }
+
+/* API KEY SETTINGS */
+.settings-section { margin: 12px 16px; padding: 12px 14px; background: var(--surface); border: 1px solid var(--border); border-radius: 10px; }
+.settings-section label { font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text3); display: block; margin-bottom: 8px; }
+.settings-row { display: flex; gap: 8px; }
+.settings-row input { flex: 1; font-size: 11px; }
+.settings-row button { padding: 8px 12px; background: none; border: 1px solid var(--border2); border-radius: 6px; color: var(--teal); font-family: 'DM Mono', monospace; font-size: 10px; cursor: pointer; white-space: nowrap; }
+
+@keyframes fadeUp { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+.spinner { display: inline-block; width: 14px; height: 14px; border: 2px solid var(--border2); border-top-color: var(--gold); border-radius: 50%; animation: spin 0.7s linear infinite; vertical-align: middle; margin-right: 6px; }
+@keyframes spin { to { transform: rotate(360deg); } }
+.dots::after { content: ''; animation: dots 1.2s steps(4, end) infinite; }
+@keyframes dots { 0% { content: ''; } 25% { content: '.'; } 50% { content: '..'; } 75% { content: '...'; } }
+::-webkit-scrollbar { width: 4px; height: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--surface3); border-radius: 2px; }
+
+/* DRAG HANDLE */
+.drag-handle { color: var(--text3); cursor: grab; padding: 0 4px; font-size: 16px; line-height: 1; }
+.empty-state { text-align: center; padding: 30px 20px; color: var(--text3); font-size: 12px; font-family: 'DM Mono', monospace; }
+.bismillah { text-align: center; font-family: 'Cormorant Garamond', serif; font-size: 20px; color: var(--gold-dim); padding: 16px 20px 4px; letter-spacing: 0.05em; }
+
+/* ENGINE MODULE CSS ADDITIONS */
 .track-row { display: flex; align-items: center; justify-content: space-between; padding: 12px; border-bottom: 1px solid var(--border); }
 .track-row:last-child { border-bottom: none; }
 .track-info { flex: 1; }
 .track-title { font-size: 14px; font-weight: 500; color: var(--text); }
+.track-streak { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--gold-dim); margin-top: 4px; }
 .track-actions { display: flex; gap: 8px; align-items: center; }
 .btn-check-eng { width: 32px; height: 32px; border-radius: 8px; border: 1px solid var(--border2); background: var(--surface2); color: var(--text3); cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 14px; transition: all 0.2s; }
 .btn-check-eng.done { background: rgba(74,184,160,0.1); border-color: var(--teal); color: var(--teal); }
 .btn-check-eng.fail { background: rgba(212,117,106,0.1); border-color: var(--rose); color: var(--rose); }
+.prog-container-eng { height: 6px; background: var(--surface3); border-radius: 3px; overflow: hidden; margin-top: 8px; }
+.prog-bar-eng { height: 100%; background: var(--teal); width: 0%; transition: width 0.3s; }
+.review-box { background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; padding: 16px; margin-top: 12px; font-size: 13px; line-height: 1.6; color: var(--text2); }
+.review-box strong { color: var(--gold); }
 .btn-primary-eng { background: var(--gold); border: none; border-radius: 8px; color: #080c0b; font-family: 'DM Mono', monospace; font-size: 11px; font-weight: 600; cursor: pointer; padding: 10px; width: 100%; transition: opacity 0.2s; margin-top: 8px;}
 .btn-primary-eng:hover { opacity: 0.85; }
 
-/* PREMIUM SYSTEMS */
+/* PREMIUM SYSTEMS (GROWTH, GOALS, REVIEW) */
 .premium-card { background: linear-gradient(145deg, var(--surface), var(--bg2)); border: 1px solid var(--border2); border-radius: 12px; padding: 18px; margin: 0 16px 14px; position: relative; overflow: hidden; box-shadow: 0 4px 20px rgba(0,0,0,0.2); }
 .premium-card::before { content:''; position:absolute; top:0; left:0; width:2px; height:100%; background:var(--gold); opacity:0.4; }
 .prem-title { font-family: 'Cormorant Garamond', serif; font-size: 20px; color: var(--gold2); margin-bottom: 4px; }
@@ -658,20 +733,129 @@ select option { background: var(--surface2); }
 .hidden-form { display: none; background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; padding: 14px; margin-bottom: 14px; }
 .hidden-form.open { display: block; animation: fadeUp 0.3s ease; }
 
-/* COMPASS */
-.compass { background: #0e0e0c; color: #d4cfc4; font-family: 'Inter', sans-serif; font-size: 13px; padding: 2.5rem 1.5rem 3rem; max-width: 680px; margin: 0 auto; }
-.compass .header { border-bottom: 0.5px solid #2a2a26; padding-bottom: 1.5rem; margin-bottom: 2rem; }
-.compass .header-top { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 0.4rem; }
-.compass .name { font-family: 'EB Garamond', serif; font-size: 28px; font-weight: 400; color: #e8e3d8; letter-spacing: -0.3px; }
-.compass .vision-block { background: #141410; border: 0.5px solid #2a2a26; border-radius: 8px; padding: 1rem 1.25rem; margin-bottom: 2rem; }
-.compass .vision-text { font-family: 'EB Garamond', serif; font-size: 15px; color: #c8b97a; font-style: italic; line-height: 1.6; }
-.compass .domains-grid { display: flex; flex-direction: column; gap: 1px; }
-.compass .domain { background: #111110; border: 0.5px solid #1e1e1a; border-radius: 6px; overflow: hidden; margin-bottom: 6px; }
-.compass .domain-header { display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem 1rem; cursor: pointer; user-select: none; transition: background 0.15s; }
-.compass .domain-header:hover { background: #161614; }
-.compass .domain-num { font-size: 10px; color: #333330; font-weight: 500; min-width: 16px; letter-spacing: 0.05em; }
-.compass .domain-name { font-size: 13px; font-weight: 500; color: #c8c4b8; flex: 1; letter-spacing: 0.02em; }
-.compass .domain-tag { font-size: 10px; padding: 2px 8px; border-radius: 20px; letter-spacing: 0.06em; text-transform: uppercase; font-weight: 500; }
+/* COMPASS TAB CSS ADDITIONS */
+.compass {
+  background: #0e0e0c;
+  color: #d4cfc4;
+  font-family: 'Inter', sans-serif;
+  font-size: 13px;
+  padding: 2.5rem 1.5rem 3rem;
+  max-width: 680px;
+  margin: 0 auto;
+}
+
+.compass .header {
+  border-bottom: 0.5px solid #2a2a26;
+  padding-bottom: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.compass .header-top {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: 0.4rem;
+}
+
+.compass .name {
+  font-family: 'EB Garamond', serif;
+  font-size: 28px;
+  font-weight: 400;
+  color: #e8e3d8;
+  letter-spacing: -0.3px;
+}
+
+.compass .date {
+  font-size: 11px;
+  color: #4a4a44;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.compass .subtitle {
+  font-size: 11px;
+  color: #4a4a44;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.compass .vision-block {
+  background: #141410;
+  border: 0.5px solid #2a2a26;
+  border-radius: 8px;
+  padding: 1rem 1.25rem;
+  margin-bottom: 2rem;
+}
+
+.compass .vision-label {
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #4a4a44;
+  margin-bottom: 0.5rem;
+}
+
+.compass .vision-text {
+  font-family: 'EB Garamond', serif;
+  font-size: 15px;
+  color: #c8b97a;
+  font-style: italic;
+  line-height: 1.6;
+}
+
+.compass .domains-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.compass .domain {
+  background: #111110;
+  border: 0.5px solid #1e1e1a;
+  border-radius: 6px;
+  overflow: hidden;
+  margin-bottom: 6px;
+}
+
+.compass .domain-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  cursor: pointer;
+  user-select: none;
+  transition: background 0.15s;
+}
+
+.compass .domain-header:hover {
+  background: #161614;
+}
+
+.compass .domain-num {
+  font-size: 10px;
+  color: #333330;
+  font-weight: 500;
+  min-width: 16px;
+  letter-spacing: 0.05em;
+}
+
+.compass .domain-name {
+  font-size: 13px;
+  font-weight: 500;
+  color: #c8c4b8;
+  flex: 1;
+  letter-spacing: 0.02em;
+}
+
+.compass .domain-tag {
+  font-size: 10px;
+  padding: 2px 8px;
+  border-radius: 20px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  font-weight: 500;
+}
+
 .compass .tag-learn { background: #1a1f14; color: #5a7a42; border: 0.5px solid #2a3a1e; }
 .compass .tag-build { background: #1a1614; color: #7a5242; border: 0.5px solid #3a2a1e; }
 .compass .tag-grow  { background: #141a1e; color: #426a7a; border: 0.5px solid #1e2a3a; }
@@ -681,13 +865,89 @@ select option { background: var(--surface2); }
 .compass .tag-duty  { background: #1a1614; color: #7a6042; border: 0.5px solid #3a2a1e; }
 .compass .tag-mind  { background: #1a1418; color: #7a4a60; border: 0.5px solid #3a1e28; }
 .compass .tag-fun   { background: #141a1a; color: #427a7a; border: 0.5px solid #1e3a3a; }
-.compass .domain-body { display: none; padding: 0 1rem 0.875rem 2.75rem; border-top: 0.5px solid #1a1a16; }
-.compass .domain.open .domain-body { display: block; }
-.compass .goal-line { font-size: 11px; color: #c8b97a; font-style: italic; font-family: 'EB Garamond', serif; margin-bottom: 0.6rem; padding-top: 0.6rem; }
-.compass .items-list { list-style: none; display: flex; flex-direction: column; gap: 3px; }
-.compass .items-list li { font-size: 12px; color: #6a6a62; padding-left: 0.75rem; position: relative; line-height: 1.5; }
-.compass .items-list li::before { content: '–'; position: absolute; left: 0; color: #333330; }
-.compass .expand-all { font-size: 10px; color: #4a4a44; letter-spacing: 0.1em; text-transform: uppercase; cursor: pointer; border: none; background: none; margin-bottom: 1rem; display: block; margin-left: auto; }
+
+.compass .chevron {
+  font-size: 10px;
+  color: #333330;
+  transition: transform 0.2s;
+}
+
+.compass .domain.open .chevron {
+  transform: rotate(90deg);
+}
+
+.compass .domain-body {
+  display: none;
+  padding: 0 1rem 0.875rem 2.75rem;
+  border-top: 0.5px solid #1a1a16;
+}
+
+.compass .domain.open .domain-body {
+  display: block;
+}
+
+.compass .goal-line {
+  font-size: 11px;
+  color: #c8b97a;
+  font-style: italic;
+  font-family: 'EB Garamond', serif;
+  margin-bottom: 0.6rem;
+  padding-top: 0.6rem;
+}
+
+.compass .items-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.compass .items-list li {
+  font-size: 12px;
+  color: #6a6a62;
+  padding-left: 0.75rem;
+  position: relative;
+  line-height: 1.5;
+}
+
+.compass .items-list li::before {
+  content: '–';
+  position: absolute;
+  left: 0;
+  color: #333330;
+}
+
+.compass .divider {
+  height: 0.5px;
+  background: #1e1e1a;
+  margin: 1.5rem 0;
+}
+
+.compass .footer {
+  text-align: center;
+  font-size: 10px;
+  color: #333330;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding-top: 1rem;
+}
+
+.compass .expand-all {
+  font-size: 10px;
+  color: #4a4a44;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  cursor: pointer;
+  border: none;
+  background: none;
+  padding: 0;
+  margin-bottom: 1rem;
+  display: block;
+  margin-left: auto;
+  transition: color 0.15s;
+}
+
+.compass .expand-all:hover { color: #7a7a72; }
 </style>
 </head>
 <body>
@@ -700,7 +960,6 @@ select option { background: var(--surface2); }
       <h1>Maher</h1>
       <div class="sub">
         <span id="day-date-label">Loading...</span>
-        <span class="sync-badge" id="sync-status">☁️ Cached Mode</span>
       </div>
     </div>
     <div class="top-bar-right">
@@ -778,6 +1037,29 @@ select option { background: var(--surface2); }
   </div>
 </div>
 
+<div id="tab-ai" class="tab-panel">
+  <div class="top-bar">
+    <div class="top-bar-left">
+      <h1>AI Adapt ✦</h1>
+      <div class="sub">Personalized advice based on your schedule</div>
+    </div>
+  </div>
+  <div class="settings-section">
+    <label>DeepSeek API Key</label>
+    <div class="settings-row"><input type="password" id="api-key-in" placeholder="sk-..." value=""><button onclick="saveApiKey()">Save</button></div>
+    <div style="font-family:'DM Mono',monospace;font-size:9px;color:var(--text3);margin-top:6px" id="api-key-status">No key saved</div>
+  </div>
+  <div class="preset-row">
+    <button class="preset-btn" onclick="usePreset('low_energy')">😴 Low Energy</button>
+    <button class="preset-btn" onclick="usePreset('late')">⏰ Woke Late</button>
+    <button class="preset-btn" onclick="usePreset('anxious')">💭 Anxious</button>
+    <button class="preset-btn" onclick="usePreset('high')">⚡ High Energy</button>
+    <button class="preset-btn" onclick="usePreset('optimize')">🎯 Optimize Day</button>
+  </div>
+  <div class="ai-chat" id="ai-chat"><div class="ai-msg assistant">As-salamu alaykum, Maher. I'm your AI scheduling assistant. Tell me how you're feeling or what you need help with today — I'll adapt your routine accordingly.</div></div>
+  <div class="ai-input-row"><textarea id="ai-input" placeholder="How can I help you today?" rows="1" onkeydown="aiKeydown(event)"></textarea><button class="ai-send-btn" id="ai-send" onclick="sendAI()">→</button></div>
+</div>
+
 <div id="tab-engine" class="tab-panel">
   <div class="top-bar">
     <div class="top-bar-left">
@@ -827,7 +1109,7 @@ select option { background: var(--surface2); }
 
   <div class="card">
     <h2>Diet Log</h2>
-    <div class="sub" style="margin-bottom:10px;text-transform:none">No judgment. Pure tracking.</div>
+    <div class="sub" style="margin-bottom:10px;text-transform:none">No AI judgment. Pure tracking.</div>
     <div style="display:flex;gap:8px;margin-bottom:12px;">
       <input type="time" id="diet-time" style="width:auto;">
       <input type="text" id="diet-item" placeholder="Meal description...">
@@ -838,13 +1120,7 @@ select option { background: var(--surface2); }
 </div>
 
 <div id="tab-growth" class="tab-panel">
-  <div class="top-bar">
-    <div class="top-bar-left">
-      <h1>Growth</h1>
-      <div class="sub">Progress & Mastery</div>
-    </div>
-  </div>
-
+  <div class="top-bar"><div class="top-bar-left"><h1>Growth</h1><div class="sub">Progress & Mastery</div></div></div>
   <div class="sec-label">Hard Skills Progress</div>
   <button class="ghost-btn" style="margin: 0 16px 12px; width: calc(100% - 32px);" onclick="GrowthSystem.toggleForm('progress')">+ Add New Tracker</button>
   
@@ -856,76 +1132,44 @@ select option { background: var(--surface2); }
     </div>
     <button class="btn-primary-eng" onclick="GrowthSystem.addProgress()">Save Tracker</button>
   </div>
-
   <div id="growth-progress-list"></div>
 
   <div class="sec-label" style="margin-top:10px;">Media Consumption</div>
   <div class="sub" style="margin: 0 20px 12px; text-transform:none;">Requires 100% + Reflection to archive.</div>
   
   <button class="ghost-btn" style="margin: 0 16px 12px; width: calc(100% - 32px);" onclick="GrowthSystem.toggleForm('consume')">+ Add Media</button>
-  
   <div id="form-consume" class="hidden-form" style="margin: 0 16px 16px;">
     <input type="text" id="cons-title" placeholder="Book / Podcast Title" style="margin-bottom:8px;">
     <div style="display:flex; gap:8px; margin-bottom:8px;">
-      <select id="cons-type">
-        <option value="Book">Book</option>
-        <option value="Video">Video</option>
-        <option value="Podcast">Podcast</option>
-        <option value="Article">Article</option>
-      </select>
+      <select id="cons-type"><option value="Book">Book</option><option value="Video">Video</option><option value="Podcast">Podcast</option></select>
       <input type="number" id="cons-total" placeholder="Total Length">
     </div>
     <button class="btn-primary-eng" onclick="GrowthSystem.addConsumption()">Start Tracking</button>
   </div>
-
   <div id="growth-consume-active"></div>
-  
   <div class="sec-label" style="margin-top:16px; border-top:1px solid var(--border); padding-top:16px;">Archived Vault</div>
   <div id="growth-consume-archived"></div>
 </div>
 
 <div id="tab-goals" class="tab-panel">
-  <div class="top-bar">
-    <div class="top-bar-left">
-      <h1>Direction</h1>
-      <div class="sub">Life Vision & Goals</div>
-    </div>
-  </div>
-
+  <div class="top-bar"><div class="top-bar-left"><h1>Direction</h1><div class="sub">Life Vision & Goals</div></div></div>
   <div class="premium-card">
     <div class="sec-label" style="padding: 0 0 8px;">1. Life Vision & Identity</div>
-    <textarea id="vision-text" class="vision-area" placeholder="Write your ultimate vision, your future self, your mission..." onchange="GoalsSystem.saveVision()"></textarea>
+    <textarea id="vision-text" class="vision-area" placeholder="Write your vision..." onchange="GoalsSystem.saveVision()"></textarea>
   </div>
-
   <div class="sec-label">2. Active Goals</div>
   <button class="ghost-btn" style="margin: 0 16px 12px; width: calc(100% - 32px);" onclick="GoalsSystem.toggleForm('goal')">+ Define New Goal</button>
-  
   <div id="form-goal" class="hidden-form" style="margin: 0 16px 16px;">
     <input type="text" id="goal-title" placeholder="Goal Title" style="margin-bottom:8px;">
     <input type="text" id="goal-why" placeholder="Why does this matter?" style="margin-bottom:8px;">
     <div style="display:flex; gap:8px; margin-bottom:8px;">
-      <select id="goal-cat">
-        <option value="Deen">Deen</option>
-        <option value="Business">Business</option>
-        <option value="Health">Health</option>
-        <option value="Learning">Learning</option>
-      </select>
-      <select id="goal-deadline">
-        <option value="1 Week">1 Week</option>
-        <option value="1 Month">1 Month</option>
-        <option value="3 Months">3 Months</option>
-        <option value="6 Months">6 Months</option>
-        <option value="1 Year">1 Year</option>
-      </select>
+      <select id="goal-cat"><option value="Deen">Deen</option><option value="Business">Business</option><option value="Health">Health</option><option value="Learning">Learning</option></select>
+      <select id="goal-deadline"><option value="1 Week">1 Week</option><option value="1 Month">1 Month</option><option value="3 Months">3 Months</option><option value="6 Months">6 Months</option><option value="1 Year">1 Year</option></select>
     </div>
     <button class="btn-primary-eng" onclick="GoalsSystem.addGoal()">Commit Goal</button>
   </div>
-
   <div id="goals-list-premium"></div>
-
   <div class="sec-label" style="margin-top:16px;">3. Goal Systems (Habits)</div>
-  <div class="sub" style="margin: 0 20px 12px; text-transform:none;">Repeatable daily/weekly actions tied to your goals.</div>
-  
   <div style="margin: 0 16px 16px; display:flex; gap:8px;">
     <input type="text" id="sys-title" placeholder="System (e.g. Code 2 hrs)">
     <button class="btn-check-eng done" style="width:auto; padding:0 12px;" onclick="GoalsSystem.addSystem()">+</button>
@@ -934,13 +1178,7 @@ select option { background: var(--surface2); }
 </div>
 
 <div id="tab-revision" class="tab-panel">
-  <div class="top-bar">
-    <div class="top-bar-left">
-      <h1>Revision</h1>
-      <div class="sub">Spaced Repetition Vault</div>
-    </div>
-  </div>
-
+  <div class="top-bar"><div class="top-bar-left"><h1>Revision</h1><div class="sub">Spaced Repetition Vault</div></div></div>
   <div class="premium-card" style="padding-bottom:12px;">
     <div style="display:flex; gap:8px; margin-bottom:12px;">
       <input type="text" id="srs-topic" placeholder="Topic (e.g. SQL Joins)">
@@ -948,56 +1186,30 @@ select option { background: var(--surface2); }
     </div>
     <button class="btn-primary-eng" style="margin-top:0;" onclick="RevisionSystem.addItem()">+ Add to Vault</button>
   </div>
-
   <div class="sec-label">Pending Queue (Due Now)</div>
   <div id="srs-pending-list" style="margin-bottom: 24px;"></div>
-
   <div class="sec-label">Archive & Mastered</div>
   <div id="srs-vault-list"></div>
 </div>
 
 <div id="tab-review" class="tab-panel">
-  <div class="top-bar">
-    <div class="top-bar-left">
-      <h1>Daily Review</h1>
-      <div class="sub">Execution & Insights</div>
-    </div>
-  </div>
-  
+  <div class="top-bar"><div class="top-bar-left"><h1>Daily Review</h1><div class="sub">Execution & Insights</div></div></div>
   <div class="sec-label">Data Integration</div>
   <div class="stat-grid" style="padding: 0 16px;" id="review-stats-grid"></div>
-
-  <div class="premium-card">
-    <div class="prem-title" style="font-size:16px;">System Insights</div>
-    <div id="review-insights-box" style="margin-top:12px;"></div>
-  </div>
-
   <div class="sec-label">Energy & State</div>
   <div class="premium-card" style="padding: 12px 18px;">
-    <div class="ctrl-row" style="margin-top:0;">
-      <span class="ms-text">Focus & Deep Work</span>
-      <div style="display:flex; gap:4px;" id="rate-focus"></div>
-    </div>
-    <div class="ctrl-row">
-      <span class="ms-text">Discipline</span>
-      <div style="display:flex; gap:4px;" id="rate-disc"></div>
-    </div>
-    <div class="ctrl-row">
-      <span class="ms-text">Energy Level</span>
-      <div style="display:flex; gap:4px;" id="rate-energy"></div>
-    </div>
+    <div class="ctrl-row" style="margin-top:0;"><span class="ms-text">Focus</span><div style="display:flex; gap:4px;" id="rate-focus"></div></div>
+    <div class="ctrl-row"><span class="ms-text">Discipline</span><div style="display:flex; gap:4px;" id="rate-disc"></div></div>
+    <div class="ctrl-row"><span class="ms-text">Energy</span><div style="display:flex; gap:4px;" id="rate-energy"></div></div>
   </div>
-
   <div class="sec-label">Journal</div>
-  <div class="premium-card" style="margin-bottom:30px;">
-    <div class="sub" style="margin-bottom:4px;">What went well today?</div>
-    <textarea id="j-well" class="vision-area" style="min-height:50px; font-family:'DM Mono',monospace; font-size:12px; border-bottom:1px solid var(--border2); margin-bottom:12px;" onchange="ReviewSystem.saveJournal()"></textarea>
-    
-    <div class="sub" style="margin-bottom:4px;">What wasted my time?</div>
-    <textarea id="j-waste" class="vision-area" style="min-height:50px; font-family:'DM Mono',monospace; font-size:12px; border-bottom:1px solid var(--border2); margin-bottom:12px;" onchange="ReviewSystem.saveJournal()"></textarea>
-    
-    <div class="sub" style="margin-bottom:4px;">What will I improve tomorrow?</div>
-    <textarea id="j-improve" class="vision-area" style="min-height:50px; font-family:'DM Mono',monospace; font-size:12px;" onchange="ReviewSystem.saveJournal()"></textarea>
+  <div class="premium-card">
+    <div class="sub" style="margin-bottom:4px;">What went well?</div>
+    <textarea id="j-well" class="vision-area" style="min-height:50px; font-size:12px; border-bottom:1px solid var(--border2);" onchange="ReviewSystem.saveJournal()"></textarea>
+    <div class="sub" style="margin-bottom:4px; margin-top:8px;">What wasted time?</div>
+    <textarea id="j-waste" class="vision-area" style="min-height:50px; font-size:12px; border-bottom:1px solid var(--border2);" onchange="ReviewSystem.saveJournal()"></textarea>
+    <div class="sub" style="margin-bottom:4px; margin-top:8px;">What to improve?</div>
+    <textarea id="j-improve" class="vision-area" style="min-height:50px; font-size:12px;" onchange="ReviewSystem.saveJournal()"></textarea>
   </div>
 </div>
 
@@ -1006,198 +1218,50 @@ select option { background: var(--surface2); }
     <div class="header">
       <div class="header-top">
         <span class="name">Maher Anam</span>
-        <span class="date">June 2026</span>
+        <span class="date">Life Operating System</span>
       </div>
-      <div class="subtitle">Life Compass — 10 Domains</div>
     </div>
-
-    <div class="vision-block">
-      <div class="vision-label">Vision</div>
-      <div class="vision-text">BS Economics CGPA 4.00 · Data Analyst · Founder of IELTSin30days · Skilled, grounded, and building something real.</div>
-    </div>
-
     <button class="expand-all" onclick="toggleAllCompassDomains()">expand all</button>
-
     <div class="domains-grid" id="domains">
       <div class="domain" onclick="toggleCompassDomain(this)">
-        <div class="domain-header">
-          <span class="domain-num">01</span>
-          <span class="domain-name">Academics</span>
-          <span class="domain-tag tag-learn">Learn</span>
-          <span class="chevron">›</span>
-        </div>
-        <div class="domain-body">
-          <div class="goal-line">CGPA 4.00/4.00 this semester.</div>
-          <ul class="items-list">
-            <li>All assignments submitted on time</li>
-            <li>Ace every quiz</li>
-            <li>No extra reading beyond syllabus — pure execution</li>
-          </ul>
-        </div>
+        <div class="domain-header"><span class="domain-num">01</span><span class="domain-name">Academics</span><span class="domain-tag tag-learn">Learn</span></div>
+        <div class="domain-body"><div class="goal-line">CGPA 4.00/4.00 execution.</div><ul class="items-list"><li>All assignments on time</li><li>Ace every quiz</li></ul></div>
       </div>
-
       <div class="domain" onclick="toggleCompassDomain(this)">
-        <div class="domain-header">
-          <span class="domain-num">02</span>
-          <span class="domain-name">Skill</span>
-          <span class="domain-tag tag-learn">Learn</span>
-          <span class="chevron">›</span>
-        </div>
-        <div class="domain-body">
-          <div class="goal-line">Become a Data Analyst in 6 months.</div>
-          <ul class="items-list">
-            <li>Practical SQL — chapter by chapter</li>
-            <li>DataCamp — structured track</li>
-            <li>One active skill at a time, no distractions</li>
-          </ul>
-        </div>
+        <div class="domain-header"><span class="domain-num">02</span><span class="domain-name">Skill</span><span class="domain-tag tag-learn">Learn</span></div>
+        <div class="domain-body"><div class="goal-line">Become a Data Analyst.</div><ul class="items-list"><li>Practical SQL daily</li><li>One active skill at a time</li></ul></div>
       </div>
-
       <div class="domain" onclick="toggleCompassDomain(this)">
-        <div class="domain-header">
-          <span class="domain-num">03</span>
-          <span class="domain-name">Projects / Preneurs</span>
-          <span class="domain-tag tag-build">Build</span>
-          <span class="chevron">›</span>
-        </div>
-        <div class="domain-body">
-          <div class="goal-line">Ship IELTSin30days. One project, full focus.</div>
-          <ul class="items-list">
-            <li>React + Vite + Tailwind + Supabase stack</li>
-            <li>Drill player components across all question types</li>
-            <li>No new projects until this ships</li>
-          </ul>
-        </div>
+        <div class="domain-header"><span class="domain-num">03</span><span class="domain-name">Projects / Preneurs</span><span class="domain-tag tag-build">Build</span></div>
+        <div class="domain-body"><div class="goal-line">Ship IELTSin30days.</div><ul class="items-list"><li>React + Vite + Tailwind + Supabase</li><li>No new projects until this ships</li></ul></div>
       </div>
-
       <div class="domain" onclick="toggleCompassDomain(this)">
-        <div class="domain-header">
-          <span class="domain-num">04</span>
-          <span class="domain-name">Growth — Consumption</span>
-          <span class="domain-tag tag-grow">Grow</span>
-          <span class="chevron">›</span>
-        </div>
-        <div class="domain-body">
-          <div class="goal-line">Replace mindless scrolling with intentional intake.</div>
-          <ul class="items-list">
-            <li>Books — philosophy, biography, literature syllabus</li>
-            <li>Podcasts — curated, purposeful</li>
-            <li>Articles and videos — research and curiosity only</li>
-            <li>Discipline is the point, not just the content</li>
-          </ul>
-        </div>
+        <div class="domain-header"><span class="domain-num">04</span><span class="domain-name">Growth — Consumption</span><span class="domain-tag tag-grow">Grow</span></div>
+        <div class="domain-body"><div class="goal-line">Intentional intake.</div><ul class="items-list"><li>Books — philosophy, literature</li><li>Discipline is the point</li></ul></div>
       </div>
-
       <div class="domain" onclick="toggleCompassDomain(this)">
-        <div class="domain-header">
-          <span class="domain-num">05</span>
-          <span class="domain-name">Body & Mind</span>
-          <span class="domain-tag tag-body">Body</span>
-          <span class="chevron">›</span>
-        </div>
-        <div class="domain-body">
-          <div class="goal-line">Physical and environmental wellness as a foundation.</div>
-          <ul class="items-list">
-            <li>Gym — PPL split</li>
-            <li>Calisthenics and competitive running</li>
-            <li>Glowup — skincare, grooming, diet</li>
-            <li>Meditate and journal daily</li>
-            <li>Plants, sunlight, room clean and tidy</li>
-          </ul>
-        </div>
+        <div class="domain-header"><span class="domain-num">05</span><span class="domain-name">Body & Mind</span><span class="domain-tag tag-body">Body</span></div>
+        <div class="domain-body"><div class="goal-line">Physical wellness as a foundation.</div><ul class="items-list"><li>Gym — PPL split</li><li>Glowup — skincare, diet</li></ul></div>
       </div>
-
       <div class="domain" onclick="toggleCompassDomain(this)">
-        <div class="domain-header">
-          <span class="domain-num">06</span>
-          <span class="domain-name">Expression</span>
-          <span class="domain-tag tag-make">Make</span>
-          <span class="chevron">›</span>
-        </div>
-        <div class="domain-body">
-          <div class="goal-line">Make things. Four mediums, one creative life.</div>
-          <ul class="items-list">
-            <li>Music — guitar, piano, production in FL Studio</li>
-            <li>Lyrics and poetry — Bangla songwriting</li>
-            <li>Art — drawing and sketching</li>
-            <li>Writing — essays, stories, whatever comes</li>
-          </ul>
-        </div>
+        <div class="domain-header"><span class="domain-num">06</span><span class="domain-name">Expression</span><span class="domain-tag tag-make">Make</span></div>
+        <div class="domain-body"><div class="goal-line">Make things.</div><ul class="items-list"><li>Music — guitar, piano</li><li>Writing — essays, stories</li></ul></div>
       </div>
-
       <div class="domain" onclick="toggleCompassDomain(this)">
-        <div class="domain-header">
-          <span class="domain-num">07</span>
-          <span class="domain-name">Responsibilities</span>
-          <span class="domain-tag tag-duty">Duty</span>
-          <span class="chevron">›</span>
-        </div>
-        <div class="domain-body">
-          <div class="goal-line">Show up for yourself, your family, and your people.</div>
-          <ul class="items-list">
-            <li>Self — cook, wash clothes, iron, manage yourself</li>
-            <li>Family — water bottles, salad, groceries, dishes, massage at night</li>
-            <li>Friends — occasional favors and treating them well</li>
-            <li>Later — carry them financially, Inshallah</li>
-          </ul>
-        </div>
+        <div class="domain-header"><span class="domain-num">07</span><span class="domain-name">Responsibilities</span><span class="domain-tag tag-duty">Duty</span></div>
+        <div class="domain-body"><div class="goal-line">Show up for your people.</div><ul class="items-list"><li>Family — groceries, massage at night</li><li>Friends — treating them well</li></ul></div>
       </div>
-
       <div class="domain" onclick="toggleCompassDomain(this)">
-        <div class="domain-header">
-          <span class="domain-num">08</span>
-          <span class="domain-name">Deen</span>
-          <span class="domain-tag tag-faith">Faith</span>
-          <span class="chevron">›</span>
-        </div>
-        <div class="domain-body">
-          <div class="goal-line">Practice and understand — not just ritual.</div>
-          <ul class="items-list">
-            <li>Five prayers, consistently</li>
-            <li>Quran and Hadith — reading with understanding</li>
-            <li>Scholars — listening and learning actively</li>
-          </ul>
-        </div>
+        <div class="domain-header"><span class="domain-num">08</span><span class="domain-name">Deen</span><span class="domain-tag tag-faith">Faith</span></div>
+        <div class="domain-body"><div class="goal-line">Practice and understand.</div><ul class="items-list"><li>Five prayers consistently</li><li>Quran and Hadith</li></ul></div>
       </div>
-
       <div class="domain" onclick="toggleCompassDomain(this)">
-        <div class="domain-header">
-          <span class="domain-num">09</span>
-          <span class="domain-name">Developmental Habits</span>
-          <span class="domain-tag tag-mind">Mind</span>
-          <span class="chevron">›</span>
-        </div>
-        <div class="domain-body">
-          <div class="goal-line">Sharpen the mind the way gym sharpens the body.</div>
-          <ul class="items-list">
-            <li>Read daily — difficult material, then summarize it</li>
-            <li>Vocabulary — from reading, GMAT, and books</li>
-            <li>Write essays weekly</li>
-            <li>Impromptu speaking and debating ideas</li>
-            <li>Chess — puzzles and analyzing mistakes</li>
-            <li>Fermi estimates and mental math</li>
-            <li>Teach what you learn — explain it simply</li>
-            <li>Decision and prediction journal</li>
-          </ul>
-        </div>
+        <div class="domain-header"><span class="domain-num">09</span><span class="domain-name">Developmental Habits</span><span class="domain-tag tag-mind">Mind</span></div>
+        <div class="domain-body"><div class="goal-line">Sharpen the mind.</div><ul class="items-list"><li>Read daily, summarize</li><li>Chess — puzzles and mistakes</li></ul></div>
       </div>
-
       <div class="domain" onclick="toggleCompassDomain(this)">
-        <div class="domain-header">
-          <span class="domain-num">10</span>
-          <span class="domain-name">Fun</span>
-          <span class="domain-tag tag-fun">Rest</span>
-          <span class="chevron">›</span>
-        </div>
-        <div class="domain-body">
-          <div class="goal-line">Guilt-free recharge. This is not optional.</div>
-          <ul class="items-list">
-            <li>Humor — funny content, videos, podcasts</li>
-            <li>Adda with friends — unstructured time</li>
-            <li>Eat out once a week</li>
-            <li>Mental health podcasts</li>
-          </ul>
-        </div>
+        <div class="domain-header"><span class="domain-num">10</span><span class="domain-name">Fun</span><span class="domain-tag tag-fun">Rest</span></div>
+        <div class="domain-body"><div class="goal-line">Guilt-free recharge.</div><ul class="items-list"><li>Adda with friends</li><li>Mental health podcasts</li></ul></div>
       </div>
     </div>
     <div class="divider"></div>
@@ -1207,33 +1271,30 @@ select option { background: var(--surface2); }
 
 </div>
 
+<nav id="tab-nav">
+  <button class="tab-btn active" onclick="switchTab('schedule', this)"><span class="tab-icon">📅</span>Schedule</button>
+  <button class="tab-btn" onclick="switchTab('night', this)"><span class="tab-icon">🌙</span>Task Mgr</button>
+  <button class="tab-btn" onclick="switchTab('dopamine', this)"><span class="tab-icon">⚡</span>Rules</button>
+  <button class="tab-btn" onclick="switchTab('events', this)"><span class="tab-icon">📋</span>Tasks</button>
+  <button class="tab-btn" onclick="switchTab('ai', this)"><span class="tab-icon">✦</span>AI Adapt</button>
+  <button class="tab-btn" onclick="switchTab('engine', this)"><span class="tab-icon">⚙️</span>Engine</button>
+  <button class="tab-btn" onclick="switchTab('growth', this)"><span class="tab-icon">📈</span>Growth</button>
+  <button class="tab-btn" onclick="switchTab('goals', this)"><span class="tab-icon">🎯</span>Goals</button>
+  <button class="tab-btn" onclick="switchTab('revision', this)"><span class="tab-icon">🧠</span>Revision</button>
+  <button class="tab-btn" onclick="switchTab('review', this)"><span class="tab-icon">🔍</span>Review</button>
+  <button class="tab-btn" onclick="switchTab('compass', this)"><span class="tab-icon">🧭</span>Compass</button>
+</nav>
+
 <script>
 // =============================================
-// GLOBAL STATE MANAGER
+// SUPABASE REALTIME SYNC (Cross-Device Fixed)
 // =============================================
-let scheduleBlocks = [];
-let done = [];
-let removed = [];
-let currentMood = 'ok';
-let currentWake = '06:00';
-let userEvents = [];
-let userTasks = [];
-let taskGroups = [];
-let selectedPriority = 'med';
-let apiKey = '';
+const SUPABASE_URL = 'https://bjnexvtnauiseehorfaq.supabase.co';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJqbmV4dnRuYXVpc2VlaG9yZmFxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg4NDQyMjAsImV4cCI6MjA5NDQyMDIyMH0.lsRBa4gNnzIOyF_mw6xK4MXHR134I0qYPd_ICQQXWVM';
 
-let prayerTimes = {
-  fajr: '05:05', sunrise: '06:20', dhuhr: '12:10',
-  asr: '15:45', maghrib: '18:18', isha: '19:30'
-};
-
-// =============================================
-// SYNCHRONOUS HYDRATION PIPELINE
-// =============================================
 const AppSync = {
   client: null,
   isSyncing: false,
-  isCloudSynced: false,
   mySessionId: Math.random().toString(36).substring(2, 15),
 
   setSyncBadge(text, stateClass) {
@@ -1244,26 +1305,16 @@ const AppSync = {
   },
 
   init() {
-    // Phase 1: Load cache immediately so there are absolutely no flash-blanks
-    this.loadLocalCache();
-
-    // Phase 2: Start async connect
-    try {
-      this.client = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-      this.fetchFromCloud();
-      this.subscribe();
-    } catch(e) {
-      this.isCloudSynced = true;
-      this.setSyncBadge('☁️ Local OS', 'synced');
-    }
+    this.loadLocalInstantly();
+    this.connectCloud();
   },
 
-  loadLocalCache() {
-    const cached = localStorage.getItem('maher_planner_state');
-    if (cached) {
+  loadLocalInstantly() {
+    const localRaw = localStorage.getItem('maher_planner_state');
+    if (localRaw) {
       try {
-        const parsed = JSON.parse(cached);
-        this.applyState(parsed);
+        const localData = JSON.parse(localRaw);
+        this.applyState(localData);
       } catch(e) {
         this.reRenderAll();
       }
@@ -1272,28 +1323,37 @@ const AppSync = {
     }
   },
 
-  async fetchFromCloud() {
-    if (!this.client) return;
-    this.setSyncBadge('☁️ Syncing...', 'syncing');
-    
+  connectCloud() {
     try {
-      const { data } = await this.client.from('planner_state').select('data').eq('id', 'maher').single();
-      this.isCloudSynced = true; 
-      if (data && data.data) {
-        localStorage.setItem('maher_planner_state', JSON.stringify(data.data));
-        this.applyState(data.data);
-        this.setSyncBadge('☁️ Synced', 'synced');
-      } else {
-        await this.saveToCloud();
-      }
+      this.client = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+      this.syncWithCloud();
+      this.subscribe();
     } catch(e) {
-      this.isCloudSynced = true;
       this.setSyncBadge('☁️ Local OS', 'synced');
     }
   },
 
-  async saveToCloud() {
-    if (this.isSyncing || !this.isCloudSynced) return;
+  syncWithCloud() {
+    if (!this.client) return;
+    this.setSyncBadge('☁️ Syncing...', 'syncing');
+    
+    this.client.from('planner_state').select('data').eq('id', 'maher').single()
+      .then(({ data }) => {
+        if (data && data.data) {
+          localStorage.setItem('maher_planner_state', JSON.stringify(data.data));
+          this.applyState(data.data);
+          this.setSyncBadge('☁️ Synced', 'synced');
+        } else {
+          this.saveToCloud();
+        }
+      })
+      .catch(e => {
+        this.setSyncBadge('☁️ Local OS', 'synced');
+      });
+  },
+
+  saveToCloud() {
+    if (this.isSyncing) return;
     this.setSyncBadge('☁️ Saving...', 'syncing');
 
     const fullState = {
@@ -1304,6 +1364,7 @@ const AppSync = {
         events: userEvents,
         tasks: userTasks,
         taskGroups: typeof taskGroups !== 'undefined' ? taskGroups : [],
+        apiKey: apiKey,
         done: done,
         removed: removed,
         doneDate: new Date().toDateString(),
@@ -1322,7 +1383,7 @@ const AppSync = {
       this.client.from('planner_state').upsert({ id: 'maher', data: fullState })
         .then(({error}) => {
           if (!error) this.setSyncBadge('☁️ Synced', 'synced');
-          else this.setSyncBadge('☁️ DB Error (RLS)', 'error');
+          else this.setSyncBadge('☁️ DB Error', 'error');
         });
     }
   },
@@ -1336,6 +1397,7 @@ const AppSync = {
         userEvents = Array.isArray(data.planner.events) ? data.planner.events : [];
         userTasks = Array.isArray(data.planner.tasks) ? data.planner.tasks : [];
         if (typeof taskGroups !== 'undefined') taskGroups = Array.isArray(data.planner.taskGroups) ? data.planner.taskGroups : [];
+        apiKey = data.planner.apiKey || '';
         
         const today = new Date().toDateString();
         if (data.planner.doneDate === today) {
@@ -1386,15 +1448,21 @@ const AppSync = {
   reRenderAll() {
     document.getElementById('wake-input').value = currentWake;
     document.querySelectorAll('.mood-pill').forEach(b => b.classList.toggle('sel', b.dataset.mood === currentMood));
+    if (apiKey) {
+      const apiIn = document.getElementById('api-key-in');
+      if (apiIn) apiIn.value = apiKey;
+    }
 
     buildSchedule(); 
     if (typeof renderTaskGroups === 'function') renderTaskGroups();
     if (typeof renderEventsAndTasks === 'function') renderEventsAndTasks();
     if (typeof updateTasksCount === 'function') updateTasksCount();
+    if (typeof renderApiStatus === 'function') renderApiStatus();
+    
     if (typeof Engine !== 'undefined') Engine.renderAll();
     if (typeof GrowthSystem !== 'undefined') GrowthSystem.renderAll();
     if (typeof GoalsSystem !== 'undefined') GoalsSystem.renderAll();
-    if (typeof ReviewSystem !== 'undefined') ReviewSystem.renderRatings();
+    if (typeof ReviewSystem !== 'undefined') ReviewSystem.init();
     if (typeof RevisionSystem !== 'undefined') RevisionSystem.renderAll();
   },
 
@@ -1417,6 +1485,8 @@ const AppSync = {
 // GLOBAL CORE CLOCK
 // =============================================
 window.addEventListener('load', () => {
+  AppSync.init();
+
   const lastTab = localStorage.getItem('maher_active_tab') || 'schedule';
   const tabBtn = document.querySelector(`.tab-btn[onclick*="'${lastTab}'"]`);
   if (tabBtn) window.switchTab(lastTab, tabBtn);
@@ -1426,9 +1496,11 @@ window.addEventListener('load', () => {
   setInterval(updateActiveBlock, 60000);
   renderDayDate();
   renderDopamineRules();
-
-  AppSync.init();
   fetchPrayerTimes();
+
+  if (typeof Engine !== 'undefined') {
+    setInterval(() => Engine.checkReset(), 60000);
+  }
 });
 
 function updateClock() {
@@ -1510,7 +1582,7 @@ function fromMins(mins) {
 }
 
 // =============================================
-// ALGORITHMIC TIMELINE邏輯
+// ALGORITHMIC TIMELINE
 // =============================================
 function buildSchedule() {
   const wakeMin = toMins(currentWake);
@@ -1635,7 +1707,7 @@ function toggleDone(i) {
   done[i] = !done[i];
   renderTimeline();
   updateProgress();
-  saveStorage();
+  AppSync.saveToCloud();
 }
 
 function updateProgress() {
@@ -1661,21 +1733,21 @@ function updateActiveBlock() {
 function onWakeChange() {
   currentWake = document.getElementById('wake-input').value;
   buildSchedule();
-  saveStorage();
+  AppSync.saveToCloud();
 }
 
 function setMood(btn, mood) {
   currentMood = mood;
   document.querySelectorAll('.mood-pill').forEach(b => b.classList.remove('sel'));
   btn.classList.add('sel');
-  saveStorage();
+  AppSync.saveToCloud();
 }
 
 function rebuildDay() {
   done = scheduleBlocks.map(() => false);
   removed = scheduleBlocks.map(() => false);
   buildSchedule();
-  saveStorage();
+  AppSync.saveToCloud();
 }
 
 // =============================================
@@ -1740,7 +1812,7 @@ const Engine = {
     this.state.diet = [];
     this.state.lastResetDate = newLogicalDate;
     this.renderAll();
-    saveStorage();
+    AppSync.saveToCloud();
   },
 
   addItem(listKey, inputId) {
@@ -1751,7 +1823,7 @@ const Engine = {
       this.state[listKey].push({ id: Date.now().toString(), name, status: null, streak: 0, prevStreak: 0, history: {} });
       input.value = '';
       this.renderAll();
-      saveStorage();
+      AppSync.saveToCloud();
     }
   },
 
@@ -1759,7 +1831,7 @@ const Engine = {
     if (this.state[listKey]) {
       this.state[listKey] = this.state[listKey].filter(i => i.id !== id);
       this.renderAll();
-      saveStorage();
+      AppSync.saveToCloud();
     }
   },
 
@@ -1791,7 +1863,7 @@ const Engine = {
       delete item.history[today];
     }
     this.renderAll();
-    saveStorage();
+    AppSync.saveToCloud();
   },
 
   logDiet() {
@@ -1803,7 +1875,7 @@ const Engine = {
       this.state.diet.sort((a,b) => a.time.localeCompare(b.time));
       document.getElementById('diet-item').value = '';
       this.renderDiet();
-      saveStorage();
+      AppSync.saveToCloud();
     }
   },
 
@@ -1842,7 +1914,7 @@ const Engine = {
         <div class="track-info">
           <div class="track-title" style="${i.status === 'done' ? 'text-decoration:line-through; color:var(--text3)' : ''}">${i.name}</div>
           <div class="track-stats" style="font-family:'DM Mono', monospace; font-size:10px; color:var(--text3); margin-top:6px;">
-            🔥 Streak: <span style="color:var(--gold); font-weight:bold;">${i.streak}</span>
+            🔥 Streak: <span style="color:var(--gold-dim); font-weight:bold;">${i.streak}</span>
             <span style="margin:0 6px; color:var(--border2)">|</span>
             📊 This Month: <span style="color:var(--sky)">${monthCount}</span>
             <span style="margin:0 6px; color:var(--border2)">|</span>
@@ -1919,14 +1991,14 @@ function addTaskGroup() {
   if (title) {
     taskGroups.push({ id: Date.now().toString(), title, tasks: [] });
     input.value = '';
-    saveStorage();
+    AppSync.saveToCloud();
     renderTaskGroups();
   }
 }
 
 function deleteTaskGroup(groupId) {
   taskGroups = taskGroups.filter(g => g.id !== groupId);
-  saveStorage();
+  AppSync.saveToCloud();
   renderTaskGroups();
 }
 
@@ -1934,7 +2006,7 @@ function resetTaskGroup(groupId) {
   const group = taskGroups.find(g => g.id === groupId);
   if (group) {
     group.tasks.forEach(t => t.done = false);
-    saveStorage();
+    AppSync.saveToCloud();
     renderTaskGroups();
   }
 }
@@ -1947,7 +2019,7 @@ function addTaskToGroup(groupId) {
   if (name) {
     group.tasks.push({ id: Date.now().toString(), name, done: false });
     input.value = '';
-    saveStorage();
+    AppSync.saveToCloud();
     renderTaskGroups();
   }
 }
@@ -1956,7 +2028,7 @@ function deleteGroupTask(groupId, taskId) {
   const group = taskGroups.find(g => g.id === groupId);
   if (group) {
     group.tasks = group.tasks.filter(t => t.id !== taskId);
-    saveStorage();
+    AppSync.saveToCloud();
     renderTaskGroups();
   }
 }
@@ -1966,67 +2038,386 @@ function toggleGroupTask(groupId, taskId) {
   if (group) {
     const task = group.tasks.find(t => t.id === taskId);
     if (task) task.done = !task.done;
-    saveStorage();
+    AppSync.saveToCloud();
     renderTaskGroups();
   }
 }
 
 // =============================================
-// GROWTH CORE SYSTEM RESTORED
+// DOPAMINE RULES
+// =============================================
+function renderDopamineRules() {
+  const rules = [
+    { title: '⚡ Dopamine Fast', items: [{ text: 'Do not touch rewards until major work is done.', cls: 'rule-red' }, { text: 'During fast: Books, Chess, Poetry, Guitar only.', cls: 'rule-green' }] },
+    { title: '🛡️ Firewall Rules', items: [{ text: 'PMO — Zero tolerance.', cls: 'rule-red' }, { text: 'Planning instead of acting is forbidden.', cls: 'rule-red' }] },
+    { title: '🧱 The Domino Law', items: [{ text: 'If one habit breaks — you carry on with everything else.', cls: 'rule-green' }] }
+  ];
+  const sec = document.getElementById('rules-section');
+  if (sec) sec.innerHTML = rules.map(r => `
+    <div class="rule-card"><div class="rule-card-title">${r.title}</div>${r.items.map(i => `<div class="rule-item ${i.cls||''}"><div class="rule-dot"></div><span>${i.text}</span></div>`).join('')}</div>
+  `).join('');
+}
+
+// =============================================
+// EVENTS & TASKS
+// =============================================
+function setPri(btn, pri) {
+  selectedPriority = pri;
+  document.querySelectorAll('.pri-btn').forEach(b => { b.className = 'pri-btn'; });
+  btn.classList.add(`sel-${pri}`);
+}
+
+function addEvent() {
+  const name = document.getElementById('ev-name-in').value.trim();
+  const time = document.getElementById('ev-time-in').value;
+  const dur = parseInt(document.getElementById('ev-dur-in').value) || 60;
+  if (!name) return;
+  userEvents.push({ id: Date.now(), name, time, dur, completed: false, fixed: true });
+  document.getElementById('ev-name-in').value = '';
+  AppSync.saveToCloud();
+  renderEventsAndTasks();
+  buildSchedule();
+  updateTasksCount();
+}
+
+function addTask() {
+  const name = document.getElementById('task-name-in').value.trim();
+  const dur = parseInt(document.getElementById('task-dur-in').value) || 30;
+  const cat = document.getElementById('task-cat-in').value;
+  if (!name) return;
+  userTasks.push({ id: Date.now(), name, dur, cat, priority: selectedPriority, completed: false });
+  document.getElementById('task-name-in').value = '';
+  AppSync.saveToCloud();
+  renderEventsAndTasks();
+  buildSchedule();
+  updateTasksCount();
+}
+
+function toggleEventDone(id) {
+  const ev = userEvents.find(e => e.id === id);
+  if (ev) ev.completed = !ev.completed;
+  AppSync.saveToCloud();
+  renderEventsAndTasks();
+}
+
+function toggleTaskDone(id) {
+  const t = userTasks.find(t => t.id === id);
+  if (t) t.completed = !t.completed;
+  AppSync.saveToCloud();
+  renderEventsAndTasks();
+  updateTasksCount();
+}
+
+function removeEvent(id) {
+  userEvents = userEvents.filter(e => e.id !== id);
+  AppSync.saveToCloud();
+  renderEventsAndTasks();
+  buildSchedule();
+  updateTasksCount();
+}
+
+function removeTask(id) {
+  userTasks = userTasks.filter(t => t.id !== id);
+  AppSync.saveToCloud();
+  renderEventsAndTasks();
+  buildSchedule();
+  updateTasksCount();
+}
+
+function renderEventsAndTasks() {
+  const evList = document.getElementById('events-list');
+  const taskList = document.getElementById('tasks-list');
+  if (evList) {
+    evList.innerHTML = userEvents.length === 0 ? '<div class="empty-state">No fixed events today</div>' : userEvents.map(e => `
+      <div class="ev-item ${e.completed ? 'completed' : ''}">
+        <div class="ev-check ${e.completed ? 'done' : ''}" onclick="toggleEventDone(${e.id})">${e.completed ? '✓' : ''}</div>
+        <div class="ev-info">
+          <div class="ev-name">${e.name}</div>
+          <div class="ev-meta">${formatTime24(e.time)} · ${e.dur} min</div>
+        </div>
+        <span class="ev-badge fixed">fixed</span>
+        <button class="ev-rm" onclick="removeEvent(${e.id})">×</button>
+      </div>`).join('');
+  }
+  if (taskList) {
+    taskList.innerHTML = userTasks.length === 0 ? '<div class="empty-state">No tasks added</div>' : userTasks.map(t => `
+      <div class="ev-item ${t.completed ? 'completed' : ''}">
+        <div class="ev-check ${t.completed ? 'done' : ''}" onclick="toggleTaskDone(${t.id})">${t.completed ? '✓' : ''}</div>
+        <div class="ev-info">
+          <div class="ev-name">${t.name}</div>
+          <div class="ev-meta">${t.dur} min · ${t.cat}</div>
+        </div>
+        <span class="ev-badge ${t.priority === 'high' ? 'high-p' : t.priority === 'med' ? 'med-p' : ''}">${t.priority}</span>
+        <button class="ev-rm" onclick="removeTask(${t.id})">×</button>
+      </div>`).join('');
+  }
+}
+
+function updateTasksCount() {
+  const el = document.getElementById('tasks-count-label');
+  if (el) el.textContent = `${userTasks.filter(t => !t.completed).length} pending · ${userTasks.filter(t => t.completed).length} done`;
+}
+
+// =============================================
+// AI ADAPT
+// =============================================
+function saveApiKey() {
+  apiKey = document.getElementById('api-key-in').value.trim();
+  AppSync.saveToCloud();
+  renderApiStatus();
+}
+
+function renderApiStatus() {
+  const el = document.getElementById('api-key-status');
+  if (apiKey) {
+    el.textContent = '✓ Key saved — AI ready';
+    el.style.color = 'var(--teal)';
+  } else {
+    el.textContent = 'No key saved — using default';
+    el.style.color = 'var(--text3)';
+  }
+}
+
+function usePreset(type) {
+  const presets = {
+    low_energy: "I'm feeling low energy and overwhelmed today. Reorganize my schedule to be manageable.",
+    late: "I woke up late. Restructure my day to keep the most important things intact.",
+    anxious: "I'm feeling anxious today. Suggest a calmer, grounded routine.",
+    high: "I'm feeling high energy today. Optimize my schedule for maximum focus.",
+    optimize: "Optimize my schedule today while keeping Islamic routines strictly intact."
+  };
+  document.getElementById('ai-input').value = presets[type];
+  sendAI();
+}
+
+function aiKeydown(e) {
+  if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendAI(); }
+}
+
+async function sendAI() {
+  const input = document.getElementById('ai-input');
+  const msg = input.value.trim();
+  if (!msg) return;
+
+  input.value = '';
+  appendMsg('user', msg);
+
+  const chat = document.getElementById('ai-chat');
+  const loadingEl = appendMsg('assistant loading', '<span class="spinner"></span> Thinking<span class="dots"></span>');
+  document.getElementById('ai-send').disabled = true;
+
+  const now = new Date();
+  const schedSummary = scheduleBlocks.filter((_, i) => !removed[i]).map(b => `${b.time} — ${b.name} (${b.dur}min)`).join('\n');
+  
+  let engineContext = "No engine data.";
+  if (typeof Engine !== 'undefined') {
+    engineContext = `Habits: ${(Engine.state.habits||[]).map(x => `${x.name} (Streak:${x.streak}, Status:${x.status||'pending'})`).join(' | ')}`;
+  }
+  let growthContext = typeof GrowthSystem !== 'undefined' ? (GrowthSystem.state.progress||[]).map(p => `${p.title} (${p.cur}/${p.total})`).join(', ') : "None";
+
+  const fullMsg = `
+    User Request: "${msg}"
+    Time: ${now.toLocaleTimeString()} | Wake: ${currentWake} | Mood: ${currentMood}
+    Tasks Pending: ${userTasks.filter(t => !t.completed).map(t => `${t.name} (${t.dur}m)`).join(', ') || 'None'}
+    Events: ${userEvents.map(e => `${e.name} at ${e.time}`).join(', ') || 'None'}
+    Engine Data: ${engineContext}
+    Growth Tracker: ${growthContext}
+    Schedule:\n${schedSummary}
+  `;
+
+  const systemPrompt = `You are Maher's elite, hyper-accurate Islamic productivity Chief of Staff. You have "Total Tactical Command" over his schedule. 
+Your primary goal is 100% logical accuracy. You MUST provide correct, context-aware suggestions because he depends on this heavily.
+
+RULES OF ENGAGEMENT:
+1. Reorganize Schedule Intelligently: If he reports feeling sick, overwhelmed, or explicitly requests to skip heavy tasks (like gym or deep work), explicitly suggest removing them. Prioritize rest, family time, and lighter tasks. Reorganize the remaining timeline.
+2. The Cannibalize Rule: If he needs to extend work, dynamically cannibalize "Adda" (social) and "Sleep" equally using "changeDur".
+3. SACRED ANCHORS: You must NEVER alter, move, or compress the 5 daily Islamic prayers.
+4. Smart Task Injection: Actively pull from "Tasks Pending" to replace vague blocks.
+
+IMPORTANT — Your response MUST be valid JSON exactly like this:
+{
+  "reply": "Your brilliant, highly accurate, conversational response. Use markdown bold **like this**. Under 200 words.",
+  "changes": [
+    { "action": "remove", "blockName": "exact block name" },
+    { "action": "add", "name": "new block name", "dur": 60, "tag": "core", "note": "optional note", "after": "block name to insert after" },
+    { "action": "changeDur", "blockName": "exact block name", "dur": 45 },
+    { "action": "replace", "blockName": "exact block name", "newName": "replacement name", "tag": "core" }
+  ]
+}
+"changes" can be an empty array []. Only suggest valid changes matching his schedule strings perfectly.`;
+
+  const payload = { message: fullMsg, systemPrompt };
+  if (typeof apiKey !== 'undefined' && apiKey) payload.apiKey = apiKey; 
+
+  try {
+    const response = await fetch("/api/ai", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload)
+    });
+    const data = await response.json();
+
+    if (!response.ok) { 
+      const errorStr = typeof data.error === 'object' ? JSON.stringify(data.error) : (data.error || 'API Error');
+      throw new Error(errorStr); 
+    }
+
+    let parsed = null;
+    try {
+      const clean = data.reply.replace(/```json\s*/g, '').replace(/```\s*/g, '').trim();
+      parsed = JSON.parse(clean);
+    } catch(e) { parsed = { reply: data.reply, changes: [] }; }
+
+    const formattedReply = (parsed.reply || data.reply).replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>').replace(/\n/g, '<br>');
+    loadingEl.className = 'ai-msg assistant';
+
+    if (parsed.changes && parsed.changes.length > 0) {
+      loadingEl.innerHTML = `
+        <div>${formattedReply}</div>
+        <div class="ai-approve-row">
+          <button class="ai-approve-btn" onclick="applyAIChanges(this, ${JSON.stringify(parsed.changes).replace(/"/g, '&quot;')})">✓ Apply to my schedule</button>
+          <span style="font-family:'DM Mono',monospace;font-size:10px;color:var(--text3);align-self:center">or ignore</span>
+        </div>`;
+    } else {
+      loadingEl.innerHTML = formattedReply;
+    }
+  } catch(e) {
+    loadingEl.className = 'ai-msg assistant';
+    loadingEl.innerHTML = `<span style="color:var(--rose)">Request failed: ${e.message}</span>`;
+  }
+
+  document.getElementById('ai-send').disabled = false;
+  chat.scrollTop = chat.scrollHeight;
+}
+
+function applyAIChanges(btn, changes) {
+  if (typeof changes === 'string') {
+    try { changes = JSON.parse(changes); } catch(e) { return; }
+  }
+
+  for (const c of changes) {
+    if (c.action === 'remove') {
+      const idx = scheduleBlocks.findIndex(b => b.name.includes(c.blockName) || c.blockName.includes(b.name.replace(/[📌🕌☕💻🏋️🧴🌿💤🧠🍽️📊🗣️🌙😴☀️⚠️]/g, '').trim()));
+      if (idx !== -1 && !removed[idx]) {
+        removed[idx] = true;
+        const savedDur = scheduleBlocks[idx].dur;
+        scheduleBlocks[idx].dur = 0;
+        resequenceFrom(idx);
+        scheduleBlocks[idx].dur = savedDur;
+      }
+    } else if (c.action === 'add') {
+      let insertAfterIdx = scheduleBlocks.length - 2;
+      if (c.after) {
+        const afterIdx = scheduleBlocks.findIndex(b => b.name.includes(c.after) || c.after.includes(b.name.replace(/[📌🕌☕💻🏋️🧴🌿💤🧠🍽️📊🗣️🌙😴☀️⚠️]/g, '').trim()));
+        if (afterIdx !== -1) insertAfterIdx = afterIdx;
+      }
+      const prevBlock = scheduleBlocks[insertAfterIdx];
+      const newBlock = {
+        time: fromMins(prevBlock.rawMin + prevBlock.dur),
+        rawMin: prevBlock.rawMin + prevBlock.dur,
+        name: c.name, dur: c.dur || 30,
+        note: c.note || 'Added by AI.',
+        tag: c.tag || 'med',
+        section: prevBlock.section || 'Tasks',
+        fixed: false, isAI: true
+      };
+      scheduleBlocks.splice(insertAfterIdx + 1, 0, newBlock);
+      done.splice(insertAfterIdx + 1, 0, false);
+      removed.splice(insertAfterIdx + 1, 0, false);
+      resequenceFrom(insertAfterIdx + 1);
+    } else if (c.action === 'changeDur') {
+      const idx = scheduleBlocks.findIndex(b => b.name.includes(c.blockName) || c.blockName.includes(b.name.replace(/[📌🕌☕💻🏋️🧴🌿💤🧠🍽️📊🗣️🌙😴☀️⚠️]/g, '').trim()));
+      if (idx !== -1) {
+        scheduleBlocks[idx].dur = c.dur;
+        resequenceFrom(idx);
+      }
+    } else if (c.action === 'replace') {
+      const idx = scheduleBlocks.findIndex(b => b.name.includes(c.blockName) || c.blockName.includes(b.name.replace(/[📌🕌☕💻🏋️🧴🌿💤🧠🍽️📊🗣️🌙😴☀️⚠️]/g, '').trim()));
+      if (idx !== -1) {
+        scheduleBlocks[idx].name = c.newName;
+        if (c.tag) scheduleBlocks[idx].tag = c.tag;
+        scheduleBlocks[idx].note = c.note || 'Replaced by AI.';
+      }
+    }
+  }
+
+  AppSync.saveToCloud();
+  renderTimeline();
+  updateProgress();
+
+  const row = btn.closest('.ai-approve-row');
+  if (row) row.innerHTML = '<span class="ai-approved-badge">✓ Schedule updated</span>';
+
+  setTimeout(() => { const schedBtn = document.querySelector('.tab-btn'); if (schedBtn) switchTab('schedule', schedBtn); }, 600);
+}
+
+function appendMsg(type, content) {
+  const chat = document.getElementById('ai-chat');
+  const div = document.createElement('div');
+  div.className = `ai-msg ${type}`;
+  div.innerHTML = content;
+  chat.appendChild(div);
+  chat.scrollTop = chat.scrollHeight;
+  return div;
+}
+
+// =============================================
+// GROWTH SYSTEM
 // =============================================
 const GrowthSystem = {
   state: { progress: [], consumption: [] },
-  init() { this.renderAll(); },
   toggleForm(t) { document.getElementById(`form-${t}`).classList.toggle('open'); },
   addProgress() {
     const title = document.getElementById('prog-title').value.trim();
     const cat = document.getElementById('prog-cat').value.trim();
     const total = parseInt(document.getElementById('prog-total').value);
     if (title && total > 0) {
+      if (!this.state.progress) this.state.progress = [];
       this.state.progress.push({ id: Date.now().toString(), title, cat, cur: 0, total });
       document.getElementById('prog-title').value = '';
       this.toggleForm('progress');
       this.renderAll();
-      saveStorage();
+      AppSync.saveToCloud();
     }
   },
   updateProgress(id, val) {
     const item = (this.state.progress || []).find(i => i.id === id);
-    if (item) { item.cur = Math.max(0, Math.min(item.total, item.cur + val)); this.renderAll(); saveStorage(); }
+    if (item) { item.cur = Math.max(0, Math.min(item.total, item.cur + val)); this.renderAll(); AppSync.saveToCloud(); }
   },
   deleteProgress(id) {
     this.state.progress = (this.state.progress || []).filter(i => i.id !== id);
     this.renderAll();
-    saveStorage();
+    AppSync.saveToCloud();
   },
   addConsumption() {
     const title = document.getElementById('cons-title').value.trim();
     const type = document.getElementById('cons-type').value;
     const total = parseInt(document.getElementById('cons-total').value);
     if (title && total > 0) {
+      if (!this.state.consumption) this.state.consumption = [];
       this.state.consumption.push({ id: Date.now().toString(), title, type, cur: 0, total, reflection: '', archived: false });
       document.getElementById('cons-title').value = '';
       this.toggleForm('consume');
       this.renderAll();
-      saveStorage();
+      AppSync.saveToCloud();
     }
   },
   updateConsProgress(id, val) {
     const item = (this.state.consumption || []).find(i => i.id === id);
-    if (item && !item.archived) { item.cur = Math.max(0, Math.min(item.total, item.cur + val)); this.renderAll(); saveStorage(); }
+    if (item && !item.archived) { item.cur = Math.max(0, Math.min(item.total, item.cur + val)); this.renderAll(); AppSync.saveToCloud(); }
   },
   updateReflection(id, val) {
     const item = (this.state.consumption || []).find(i => i.id === id);
-    if (item) { item.reflection = val; saveStorage(); }
+    if (item) { item.reflection = val; AppSync.saveToCloud(); }
   },
   archiveConsumption(id) {
     const item = (this.state.consumption || []).find(i => i.id === id);
-    if (item && item.cur === item.total && item.reflection.length > 10) { item.archived = true; this.renderAll(); saveStorage(); }
+    if (item && item.cur === item.total && item.reflection.length > 10) { item.archived = true; this.renderAll(); AppSync.saveToCloud(); }
   },
   deleteConsumption(id) {
     this.state.consumption = (this.state.consumption || []).filter(i => i.id !== id);
     this.renderAll();
-    saveStorage();
+    AppSync.saveToCloud();
   },
   renderAll() {
     const pContainer = document.getElementById('growth-progress-list');
@@ -2071,3 +2462,225 @@ const GrowthSystem = {
         ${!c.archived ? `
         <div class="ctrl-row">
           <span style="font-family:'DM Mono', monospace; font-size:10px; color:var(--text3)">${pct}% CONSUMED</span>
+          <div class="num-ctrl">
+            <button class="num-btn" onclick="GrowthSystem.updateConsProgress('${c.id}', -5)">-</button>
+            <div class="num-val">${c.cur} / ${c.total}</div>
+            <button class="num-btn" onclick="GrowthSystem.updateConsProgress('${c.id}', 5)">+</button>
+          </div>
+        </div>
+        ` : ''}
+
+        ${isFull && !c.archived ? `
+        <div class="reflect-box">
+          <div class="sub" style="margin-bottom:6px; color:var(--gold)">Reflection Required</div>
+          <textarea class="vision-area" style="min-height:60px; font-size:13px;" placeholder="What are the key takeaways?" onchange="GrowthSystem.updateReflection('${c.id}', this.value)">${c.reflection || ''}</textarea>
+          ${c.reflection && c.reflection.length > 10 ? `<button class="btn-primary-eng" style="margin-top:8px;" onclick="GrowthSystem.archiveConsumption('${c.id}')">Lock & Archive</button>` : ''}
+        </div>
+        ` : ''}
+      </div>`;
+      if (c.archived) arcHTML += html; else activeHTML += html;
+    });
+
+    actContainer.innerHTML = activeHTML || `<div class="empty-state">No active media</div>`;
+    arcContainer.innerHTML = arcHTML || `<div class="empty-state">Vault is empty</div>`;
+  }
+};
+
+// =============================================
+// GOALS SYSTEM
+// =============================================
+const GoalsSystem = {
+  state: { vision: '', goals: [], systems: [] },
+  toggleForm(t) { document.getElementById(`form-${t}`).classList.toggle('open'); },
+  saveVision() { this.state.vision = document.getElementById('vision-text').value; AppSync.saveToCloud(); },
+  addGoal() {
+    const title = document.getElementById('goal-title').value.trim();
+    const why = document.getElementById('goal-why').value.trim();
+    if (title) {
+      if (!this.state.goals) this.state.goals = [];
+      this.state.goals.push({ id: Date.now().toString(), title, why, cat: document.getElementById('goal-cat').value, dl: document.getElementById('goal-deadline').value, ms: [] });
+      document.getElementById('goal-title').value = ''; document.getElementById('goal-why').value = '';
+      this.toggleForm('goal'); this.renderAll(); AppSync.saveToCloud();
+    }
+  },
+  deleteGoal(id) { this.state.goals = (this.state.goals || []).filter(g => g.id !== id); this.renderAll(); AppSync.saveToCloud(); },
+  addMS(gId) {
+    const name = prompt("Milestone name:");
+    const g = (this.state.goals || []).find(x => x.id === gId);
+    if (g && name) { if (!g.ms) g.ms = []; g.ms.push({ id: Date.now().toString(), name, done: false }); this.renderAll(); AppSync.saveToCloud(); }
+  },
+  toggleMS(gId, msId) {
+    const g = (this.state.goals || []).find(x => x.id === gId);
+    if (g && g.ms) { const ms = g.ms.find(m => m.id === msId); if (ms) ms.done = !ms.done; this.renderAll(); AppSync.saveToCloud(); }
+  },
+  addSystem() {
+    const title = document.getElementById('sys-title').value.trim();
+    if (title) {
+      if (!this.state.systems) this.state.systems = [];
+      this.state.systems.push({ id: Date.now().toString(), title, streak: 0, doneToday: false });
+      document.getElementById('sys-title').value = '';
+      this.renderAll(); AppSync.saveToCloud();
+    }
+  },
+  toggleSystem(id) {
+    const sys = (this.state.systems || []).find(s => s.id === id);
+    if (sys) { sys.doneToday = !sys.doneToday; sys.streak += sys.doneToday ? 1 : -1; this.renderAll(); AppSync.saveToCloud(); }
+  },
+  renderAll() {
+    const va = document.getElementById('vision-text');
+    if (va) va.value = this.state.vision || '';
+    const gContainer = document.getElementById('goals-list-premium');
+    if (gContainer) {
+      gContainer.innerHTML = (this.state.goals || []).map(g => {
+        const msList = g.ms || [];
+        const pct = msList.length === 0 ? 0 : Math.round((msList.filter(m=>m.done).length / msList.length) * 100);
+        return `
+        <div class="premium-card">
+          <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+            <div><div class="prem-title">${g.title}</div><span class="prem-badge">${g.cat}</span><span class="prem-badge" style="margin-left:6px; color:var(--gold)">${g.dl}</span></div>
+            <button class="del-btn" onclick="GoalsSystem.deleteGoal('${g.id}')">✕</button>
+          </div>
+          <div style="font-size:12px; color:var(--text2); margin-top:8px;">"${g.why}"</div>
+          <div class="pg-bg"><div class="pg-fill" style="width:${pct}%"></div></div>
+          <div>
+            ${msList.map(m => `
+              <div class="milestone-item" onclick="GoalsSystem.toggleMS('${g.id}', '${m.id}')">
+                <div class="ms-check ${m.done ? 'done' : ''}">✓</div>
+                <div class="ms-text">${m.name}</div>
+              </div>`).join('')}
+            <button class="ghost-btn" style="margin-top:8px;" onclick="GoalsSystem.addMS('${g.id}')">+ Add Milestone</button>
+          </div>
+        </div>`;
+      }).join('');
+    }
+    const sContainer = document.getElementById('systems-list-premium');
+    if (sContainer) {
+      sContainer.innerHTML = (this.state.systems || []).map(s => `
+        <div class="track-row" style="margin: 0 16px;">
+          <div class="track-info">
+            <div class="track-title" style="${s.doneToday ? 'text-decoration:line-through; color:var(--text3)' : ''}">${s.title}</div>
+            <div class="track-streak">🔥 Streak: ${s.streak}</div>
+          </div>
+          <button class="btn-check-eng ${s.doneToday ? 'done' : ''}" onclick="GoalsSystem.toggleSystem('${s.id}')">✓</button>
+        </div>`).join('');
+    }
+  }
+};
+
+// =============================================
+// REVISION SYSTEM
+// =============================================
+const RevisionSystem = {
+  state: { items: [] },
+  intervals: [0, 1, 3, 7, 14, 30, 60],
+  ranks: ['NPC', 'Novice', 'Skilled', 'Sigma', 'Top G', 'Demigod', 'CHAD (Mastered)'],
+  addItem() {
+    const topic = document.getElementById('srs-topic').value.trim();
+    const subject = document.getElementById('srs-subject').value.trim() || 'General';
+    if (topic) {
+      const d = new Date();
+      const dateString = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+      if (!this.state.items) this.state.items = [];
+      this.state.items.push({ id: Date.now().toString(), topic, subject, stage: 0, nextReviewDate: dateString });
+      document.getElementById('srs-topic').value = ''; document.getElementById('srs-subject').value = '';
+      this.renderAll(); AppSync.saveToCloud();
+    }
+  },
+  completeItem(id) {
+    const item = (this.state.items || []).find(i => i.id === id);
+    if (item && item.stage < 6) {
+      item.stage++;
+      const nextDate = new Date();
+      nextDate.setDate(nextDate.getDate() + this.intervals[item.stage]);
+      item.nextReviewDate = `${nextDate.getFullYear()}-${String(nextDate.getMonth()+1).padStart(2,'0')}-${String(nextDate.getDate()).padStart(2,'0')}`;
+      this.renderAll(); AppSync.saveToCloud();
+    }
+  },
+  deleteItem(id) { this.state.items = (this.state.items || []).filter(i => i.id !== id); this.renderAll(); AppSync.saveToCloud(); },
+  renderAll() {
+    const pendingContainer = document.getElementById('srs-pending-list');
+    const vaultContainer = document.getElementById('srs-vault-list');
+    if (!pendingContainer || !vaultContainer) return;
+
+    let pendingHTML = '', vaultHTML = '';
+    const today = new Date(); today.setHours(0,0,0,0);
+
+    (this.state.items || []).forEach(item => {
+      const target = new Date(item.nextReviewDate + 'T00:00:00');
+      const daysDiff = Math.ceil((target - today) / (1000 * 60 * 60 * 24));
+      const isPending = daysDiff <= 0 && item.stage < 6;
+      const rank = this.ranks[item.stage];
+
+      const html = `
+        <div class="track-row" style="background:var(--surface2); border-radius:8px; margin: 0 16px 8px; padding:12px 16px; border:1px solid var(--border)">
+          <div class="track-info">
+            <div style="display:flex; align-items:center; gap:8px;">
+              <div class="track-title">${item.topic}</div><span class="prem-badge">${item.subject}</span>
+            </div>
+            <div style="font-family:'DM Mono'; font-size:10px; color:var(--text3); margin-top:4px;">Rank: ${rank} | Stage ${item.stage}</div>
+          </div>
+          <div class="track-actions">
+            ${isPending ? `<button class="btn-check-eng done" onclick="RevisionSystem.completeItem('${item.id}')">✓</button>` : ''}
+            <button class="btn-check-eng" style="border:none;" onclick="RevisionSystem.deleteItem('${item.id}')">🗑️</button>
+          </div>
+        </div>`;
+      if (isPending) pendingHTML += html; else vaultHTML += html;
+    });
+
+    pendingContainer.innerHTML = pendingHTML || '<div class="empty-state">No reviews due.</div>';
+    vaultContainer.innerHTML = vaultHTML || '<div class="empty-state">Vault is empty.</div>';
+  }
+};
+
+// =============================================
+// REVIEW SYSTEM
+// =============================================
+const ReviewSystem = {
+  state: { journal: { well: '', waste: '', improve: '' }, ratings: { focus: 0, disc: 0, energy: 0 } },
+  init() { this.renderRatings(); },
+  saveJournal() {
+    this.state.journal = {
+      well: document.getElementById('j-well').value,
+      waste: document.getElementById('j-waste').value,
+      improve: document.getElementById('j-improve').value
+    };
+    AppSync.saveToCloud();
+  },
+  rate(cat, val) { 
+    if (!this.state.ratings) this.state.ratings = {};
+    this.state.ratings[cat] = val; 
+    this.renderRatings(); 
+    AppSync.saveToCloud(); 
+  },
+  renderRatings() {
+    ['focus', 'disc', 'energy'].forEach(cat => {
+      const container = document.getElementById(`rate-${cat}`);
+      if (!container) return;
+      const cur = (this.state.ratings && this.state.ratings[cat]) || 0;
+      container.innerHTML = [1,2,3,4,5].map(i => `
+        <div class="ms-check ${i <= cur ? 'done' : ''}" style="border-radius:50%; width:20px; height:20px;" onclick="ReviewSystem.rate('${cat}', ${i})"></div>
+      `).join('');
+    });
+    this.generateLocalSummary();
+  },
+  generateLocalSummary() {
+    const total = scheduleBlocks.filter((_, i) => !removed[i]).length;
+    const doneC = scheduleBlocks.filter((_, i) => !removed[i] && done[i]).length;
+    const pct = total > 0 ? Math.round(doneC / total * 100) : 0;
+    
+    let habitsDone = 0;
+    if (typeof Engine !== 'undefined' && Engine.state.habits) {
+      habitsDone = Engine.state.habits.filter(h => h.status === 'done').length;
+    }
+
+    const grid = document.getElementById('review-stats-grid');
+    if (grid) {
+      grid.innerHTML = `
+        <div class="stat-box"><div class="stat-num">${pct}%</div><div class="stat-label">Schedule Exec</div></div>
+        <div class="stat-box"><div class="stat-num">${habitsDone}</div><div class="stat-label">Core Habits</div></div>`;
+    }
+  }
+};
+</script>
+</body>
+</html>
