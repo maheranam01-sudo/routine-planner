@@ -587,7 +587,7 @@ select option { background: var(--surface2); }
   font-size: 15px;
 }
 
-/* TASK MANAGER */
+/* TASK MANAGER (Formerly Night Routine) */
 .task-group { margin-bottom: 16px; }
 .night-list { display: flex; flex-direction: column; gap: 6px; }
 .night-item { display: flex; align-items: center; gap: 14px; padding: 14px 16px; background: var(--surface); border: 1px solid var(--border); border-radius: 10px; cursor: pointer; transition: all 0.3s; user-select: none; }
@@ -958,9 +958,7 @@ select option { background: var(--surface2); }
   <div class="top-bar">
     <div class="top-bar-left">
       <h1>Maher</h1>
-      <div class="sub">
-        <span id="day-date-label">Loading...</span>
-      </div>
+      <div class="sub" id="day-date-label">Loading...</div>
     </div>
     <div class="top-bar-right">
       <div class="live-clock" id="live-clock">--:--</div>
@@ -993,7 +991,9 @@ select option { background: var(--surface2); }
       <div class="sub">Organize repeatable routines</div>
     </div>
   </div>
+
   <div id="task-groups-container"></div>
+  
   <div class="card">
     <div style="display:flex; gap:8px;">
       <input type="text" id="new-group-name" placeholder="New Routine Block Name...">
@@ -1038,12 +1038,7 @@ select option { background: var(--surface2); }
 </div>
 
 <div id="tab-ai" class="tab-panel">
-  <div class="top-bar">
-    <div class="top-bar-left">
-      <h1>AI Adapt ✦</h1>
-      <div class="sub">Personalized advice based on your schedule</div>
-    </div>
-  </div>
+  <div class="ai-header"><h2>AI Adapt ✦</h2><p>Personalized advice based on your schedule, prayers, and energy levels.</p></div>
   <div class="settings-section">
     <label>DeepSeek API Key</label>
     <div class="settings-row"><input type="password" id="api-key-in" placeholder="sk-..." value=""><button onclick="saveApiKey()">Save</button></div>
@@ -1056,7 +1051,7 @@ select option { background: var(--surface2); }
     <button class="preset-btn" onclick="usePreset('high')">⚡ High Energy</button>
     <button class="preset-btn" onclick="usePreset('optimize')">🎯 Optimize Day</button>
   </div>
-  <div class="ai-chat" id="ai-chat"><div class="ai-msg assistant">As-salamu alaykum, Maher. I'm your AI scheduling assistant. Tell me how you're feeling or what you need help with today — I'll adapt your routine accordingly.</div></div>
+  <div class="ai-chat" id="ai-chat"><div class="ai-msg assistant">As-salamu alaykum, Maher. I'm your AI scheduling assistant. Tell me how you're feeling or what you need help with today — I'll adapt your routine accordingly. You can also tap a preset above.</div></div>
   <div class="ai-input-row"><textarea id="ai-input" placeholder="How can I help you today?" rows="1" onkeydown="aiKeydown(event)"></textarea><button class="ai-send-btn" id="ai-send" onclick="sendAI()">→</button></div>
 </div>
 
@@ -1120,7 +1115,13 @@ select option { background: var(--surface2); }
 </div>
 
 <div id="tab-growth" class="tab-panel">
-  <div class="top-bar"><div class="top-bar-left"><h1>Growth</h1><div class="sub">Progress & Mastery</div></div></div>
+  <div class="top-bar">
+    <div class="top-bar-left">
+      <h1>Growth</h1>
+      <div class="sub">Progress & Mastery</div>
+    </div>
+  </div>
+
   <div class="sec-label">Hard Skills Progress</div>
   <button class="ghost-btn" style="margin: 0 16px 12px; width: calc(100% - 32px);" onclick="GrowthSystem.toggleForm('progress')">+ Add New Tracker</button>
   
@@ -1132,44 +1133,76 @@ select option { background: var(--surface2); }
     </div>
     <button class="btn-primary-eng" onclick="GrowthSystem.addProgress()">Save Tracker</button>
   </div>
+
   <div id="growth-progress-list"></div>
 
   <div class="sec-label" style="margin-top:10px;">Media Consumption</div>
   <div class="sub" style="margin: 0 20px 12px; text-transform:none;">Requires 100% + Reflection to archive.</div>
   
   <button class="ghost-btn" style="margin: 0 16px 12px; width: calc(100% - 32px);" onclick="GrowthSystem.toggleForm('consume')">+ Add Media</button>
+  
   <div id="form-consume" class="hidden-form" style="margin: 0 16px 16px;">
     <input type="text" id="cons-title" placeholder="Book / Podcast Title" style="margin-bottom:8px;">
     <div style="display:flex; gap:8px; margin-bottom:8px;">
-      <select id="cons-type"><option value="Book">Book</option><option value="Video">Video</option><option value="Podcast">Podcast</option></select>
+      <select id="cons-type">
+        <option value="Book">Book (pages)</option>
+        <option value="Video">Video (mins)</option>
+        <option value="Podcast">Podcast (mins)</option>
+        <option value="Article">Article (%)</option>
+      </select>
       <input type="number" id="cons-total" placeholder="Total Length">
     </div>
     <button class="btn-primary-eng" onclick="GrowthSystem.addConsumption()">Start Tracking</button>
   </div>
+
   <div id="growth-consume-active"></div>
+  
   <div class="sec-label" style="margin-top:16px; border-top:1px solid var(--border); padding-top:16px;">Archived Vault</div>
   <div id="growth-consume-archived"></div>
 </div>
 
 <div id="tab-goals" class="tab-panel">
-  <div class="top-bar"><div class="top-bar-left"><h1>Direction</h1><div class="sub">Life Vision & Goals</div></div></div>
+  <div class="top-bar">
+    <div class="top-bar-left">
+      <h1>Direction</h1>
+      <div class="sub">Life Vision & Goals</div>
+    </div>
+  </div>
+
   <div class="premium-card">
     <div class="sec-label" style="padding: 0 0 8px;">1. Life Vision & Identity</div>
-    <textarea id="vision-text" class="vision-area" placeholder="Write your vision..." onchange="GoalsSystem.saveVision()"></textarea>
+    <textarea id="vision-text" class="vision-area" placeholder="Write your ultimate vision, your future self, your mission..." onchange="GoalsSystem.saveVision()"></textarea>
   </div>
+
   <div class="sec-label">2. Active Goals</div>
   <button class="ghost-btn" style="margin: 0 16px 12px; width: calc(100% - 32px);" onclick="GoalsSystem.toggleForm('goal')">+ Define New Goal</button>
+  
   <div id="form-goal" class="hidden-form" style="margin: 0 16px 16px;">
     <input type="text" id="goal-title" placeholder="Goal Title" style="margin-bottom:8px;">
     <input type="text" id="goal-why" placeholder="Why does this matter?" style="margin-bottom:8px;">
     <div style="display:flex; gap:8px; margin-bottom:8px;">
-      <select id="goal-cat"><option value="Deen">Deen</option><option value="Business">Business</option><option value="Health">Health</option><option value="Learning">Learning</option></select>
-      <select id="goal-deadline"><option value="1 Week">1 Week</option><option value="1 Month">1 Month</option><option value="3 Months">3 Months</option><option value="6 Months">6 Months</option><option value="1 Year">1 Year</option></select>
+      <select id="goal-cat">
+        <option value="Deen">Deen</option>
+        <option value="Business">Business</option>
+        <option value="Health">Health</option>
+        <option value="Learning">Learning</option>
+      </select>
+      <select id="goal-deadline">
+        <option value="1 Week">1 Week</option>
+        <option value="1 Month">1 Month</option>
+        <option value="3 Months">3 Months</option>
+        <option value="6 Months">6 Months</option>
+        <option value="1 Year">1 Year</option>
+      </select>
     </div>
     <button class="btn-primary-eng" onclick="GoalsSystem.addGoal()">Commit Goal</button>
   </div>
+
   <div id="goals-list-premium"></div>
+
   <div class="sec-label" style="margin-top:16px;">3. Goal Systems (Habits)</div>
+  <div class="sub" style="margin: 0 20px 12px; text-transform:none;">Repeatable daily/weekly actions tied to your goals.</div>
+  
   <div style="margin: 0 16px 16px; display:flex; gap:8px;">
     <input type="text" id="sys-title" placeholder="System (e.g. Code 2 hrs)">
     <button class="btn-check-eng done" style="width:auto; padding:0 12px;" onclick="GoalsSystem.addSystem()">+</button>
@@ -1178,7 +1211,13 @@ select option { background: var(--surface2); }
 </div>
 
 <div id="tab-revision" class="tab-panel">
-  <div class="top-bar"><div class="top-bar-left"><h1>Revision</h1><div class="sub">Spaced Repetition Vault</div></div></div>
+  <div class="top-bar">
+    <div class="top-bar-left">
+      <h1>Revision</h1>
+      <div class="sub">Spaced Repetition Vault</div>
+    </div>
+  </div>
+
   <div class="premium-card" style="padding-bottom:12px;">
     <div style="display:flex; gap:8px; margin-bottom:12px;">
       <input type="text" id="srs-topic" placeholder="Topic (e.g. SQL Joins)">
@@ -1186,30 +1225,63 @@ select option { background: var(--surface2); }
     </div>
     <button class="btn-primary-eng" style="margin-top:0;" onclick="RevisionSystem.addItem()">+ Add to Vault</button>
   </div>
+
   <div class="sec-label">Pending Queue (Due Now)</div>
   <div id="srs-pending-list" style="margin-bottom: 24px;"></div>
+
   <div class="sec-label">Archive & Mastered</div>
   <div id="srs-vault-list"></div>
 </div>
 
 <div id="tab-review" class="tab-panel">
-  <div class="top-bar"><div class="top-bar-left"><h1>Daily Review</h1><div class="sub">Execution & Insights</div></div></div>
+  <div class="top-bar">
+    <div class="top-bar-left">
+      <h1>Daily Review</h1>
+      <div class="sub">Execution & Insights</div>
+    </div>
+  </div>
+  
   <div class="sec-label">Data Integration</div>
-  <div class="stat-grid" style="padding: 0 16px;" id="review-stats-grid"></div>
+  <div class="stat-grid" style="padding: 0 16px;" id="review-stats-grid">
+    </div>
+
+  <div class="premium-card">
+    <div class="prem-title" style="font-size:16px;">System Insights</div>
+    <div id="review-insights-box" style="margin-top:12px;"></div>
+  </div>
+
   <div class="sec-label">Energy & State</div>
   <div class="premium-card" style="padding: 12px 18px;">
-    <div class="ctrl-row" style="margin-top:0;"><span class="ms-text">Focus</span><div style="display:flex; gap:4px;" id="rate-focus"></div></div>
-    <div class="ctrl-row"><span class="ms-text">Discipline</span><div style="display:flex; gap:4px;" id="rate-disc"></div></div>
-    <div class="ctrl-row"><span class="ms-text">Energy</span><div style="display:flex; gap:4px;" id="rate-energy"></div></div>
+    <div class="ctrl-row" style="margin-top:0;">
+      <span class="ms-text">Focus & Deep Work</span>
+      <div style="display:flex; gap:4px;" id="rate-focus"></div>
+    </div>
+    <div class="ctrl-row">
+      <span class="ms-text">Discipline</span>
+      <div style="display:flex; gap:4px;" id="rate-disc"></div>
+    </div>
+    <div class="ctrl-row">
+      <span class="ms-text">Energy Level</span>
+      <div style="display:flex; gap:4px;" id="rate-energy"></div>
+    </div>
   </div>
+
   <div class="sec-label">Journal</div>
   <div class="premium-card">
-    <div class="sub" style="margin-bottom:4px;">What went well?</div>
-    <textarea id="j-well" class="vision-area" style="min-height:50px; font-size:12px; border-bottom:1px solid var(--border2);" onchange="ReviewSystem.saveJournal()"></textarea>
-    <div class="sub" style="margin-bottom:4px; margin-top:8px;">What wasted time?</div>
-    <textarea id="j-waste" class="vision-area" style="min-height:50px; font-size:12px; border-bottom:1px solid var(--border2);" onchange="ReviewSystem.saveJournal()"></textarea>
-    <div class="sub" style="margin-bottom:4px; margin-top:8px;">What to improve?</div>
-    <textarea id="j-improve" class="vision-area" style="min-height:50px; font-size:12px;" onchange="ReviewSystem.saveJournal()"></textarea>
+    <div class="sub" style="margin-bottom:4px;">What went well today?</div>
+    <textarea id="j-well" class="vision-area" style="min-height:50px; font-family:'DM Mono',monospace; font-size:12px; border-bottom:1px solid var(--border2); margin-bottom:12px;" onchange="ReviewSystem.saveJournal()"></textarea>
+    
+    <div class="sub" style="margin-bottom:4px;">What wasted my time?</div>
+    <textarea id="j-waste" class="vision-area" style="min-height:50px; font-family:'DM Mono',monospace; font-size:12px; border-bottom:1px solid var(--border2); margin-bottom:12px;" onchange="ReviewSystem.saveJournal()"></textarea>
+    
+    <div class="sub" style="margin-bottom:4px;">What will I improve tomorrow?</div>
+    <textarea id="j-improve" class="vision-area" style="min-height:50px; font-family:'DM Mono',monospace; font-size:12px;" onchange="ReviewSystem.saveJournal()"></textarea>
+  </div>
+  
+  <div class="sec-label">AI Daily Evaluation</div>
+  <div class="premium-card" style="margin-bottom:30px;">
+    <button class="btn-primary-eng" id="btn-generate-ai-review" style="margin-top:0;" onclick="ReviewSystem.generateAIReview()">Generate AI Review</button>
+    <div id="ai-review-output" class="review-box" style="display:none; margin-top:12px;"></div>
   </div>
 </div>
 
@@ -1218,60 +1290,209 @@ select option { background: var(--surface2); }
     <div class="header">
       <div class="header-top">
         <span class="name">Maher Anam</span>
-        <span class="date">Life Operating System</span>
+        <span class="date">June 2026</span>
       </div>
+      <div class="subtitle">Life Compass — 10 Domains</div>
     </div>
+
+    <div class="vision-block">
+      <div class="vision-label">Vision</div>
+      <div class="vision-text">BS Economics CGPA 4.00 · Data Analyst · Founder of IELTSin30days · Skilled, grounded, and building something real.</div>
+    </div>
+
     <button class="expand-all" onclick="toggleAllCompassDomains()">expand all</button>
+
     <div class="domains-grid" id="domains">
+
       <div class="domain" onclick="toggleCompassDomain(this)">
-        <div class="domain-header"><span class="domain-num">01</span><span class="domain-name">Academics</span><span class="domain-tag tag-learn">Learn</span></div>
-        <div class="domain-body"><div class="goal-line">CGPA 4.00/4.00 execution.</div><ul class="items-list"><li>All assignments on time</li><li>Ace every quiz</li></ul></div>
+        <div class="domain-header">
+          <span class="domain-num">01</span>
+          <span class="domain-name">Academics</span>
+          <span class="domain-tag tag-learn">Learn</span>
+          <span class="chevron">›</span>
+        </div>
+        <div class="domain-body">
+          <div class="goal-line">CGPA 4.00/4.00 this semester.</div>
+          <ul class="items-list">
+            <li>All assignments submitted on time</li>
+            <li>Ace every quiz</li>
+            <li>No extra reading beyond syllabus — pure execution</li>
+          </ul>
+        </div>
       </div>
+
       <div class="domain" onclick="toggleCompassDomain(this)">
-        <div class="domain-header"><span class="domain-num">02</span><span class="domain-name">Skill</span><span class="domain-tag tag-learn">Learn</span></div>
-        <div class="domain-body"><div class="goal-line">Become a Data Analyst.</div><ul class="items-list"><li>Practical SQL daily</li><li>One active skill at a time</li></ul></div>
+        <div class="domain-header">
+          <span class="domain-num">02</span>
+          <span class="domain-name">Skill</span>
+          <span class="domain-tag tag-learn">Learn</span>
+          <span class="chevron">›</span>
+        </div>
+        <div class="domain-body">
+          <div class="goal-line">Become a Data Analyst in 6 months.</div>
+          <ul class="items-list">
+            <li>Practical SQL — chapter by chapter</li>
+            <li>DataCamp — structured track</li>
+            <li>One active skill at a time, no distractions</li>
+          </ul>
+        </div>
       </div>
+
       <div class="domain" onclick="toggleCompassDomain(this)">
-        <div class="domain-header"><span class="domain-num">03</span><span class="domain-name">Projects / Preneurs</span><span class="domain-tag tag-build">Build</span></div>
-        <div class="domain-body"><div class="goal-line">Ship IELTSin30days.</div><ul class="items-list"><li>React + Vite + Tailwind + Supabase</li><li>No new projects until this ships</li></ul></div>
+        <div class="domain-header">
+          <span class="domain-num">03</span>
+          <span class="domain-name">Projects / Preneurs</span>
+          <span class="domain-tag tag-build">Build</span>
+          <span class="chevron">›</span>
+        </div>
+        <div class="domain-body">
+          <div class="goal-line">Ship IELTSin30days. One project, full focus.</div>
+          <ul class="items-list">
+            <li>React + Vite + Tailwind + Supabase stack</li>
+            <li>Drill player components across all question types</li>
+            <li>No new projects until this ships</li>
+          </ul>
+        </div>
       </div>
+
       <div class="domain" onclick="toggleCompassDomain(this)">
-        <div class="domain-header"><span class="domain-num">04</span><span class="domain-name">Growth — Consumption</span><span class="domain-tag tag-grow">Grow</span></div>
-        <div class="domain-body"><div class="goal-line">Intentional intake.</div><ul class="items-list"><li>Books — philosophy, literature</li><li>Discipline is the point</li></ul></div>
+        <div class="domain-header">
+          <span class="domain-num">04</span>
+          <span class="domain-name">Growth — Consumption</span>
+          <span class="domain-tag tag-grow">Grow</span>
+          <span class="chevron">›</span>
+        </div>
+        <div class="domain-body">
+          <div class="goal-line">Replace mindless scrolling with intentional intake.</div>
+          <ul class="items-list">
+            <li>Books — philosophy, biography, literature syllabus</li>
+            <li>Podcasts — curated, purposeful</li>
+            <li>Articles and videos — research and curiosity only</li>
+            <li>Discipline is the point, not just the content</li>
+          </ul>
+        </div>
       </div>
+
       <div class="domain" onclick="toggleCompassDomain(this)">
-        <div class="domain-header"><span class="domain-num">05</span><span class="domain-name">Body & Mind</span><span class="domain-tag tag-body">Body</span></div>
-        <div class="domain-body"><div class="goal-line">Physical wellness as a foundation.</div><ul class="items-list"><li>Gym — PPL split</li><li>Glowup — skincare, diet</li></ul></div>
+        <div class="domain-header">
+          <span class="domain-num">05</span>
+          <span class="domain-name">Body & Mind</span>
+          <span class="domain-tag tag-body">Body</span>
+          <span class="chevron">›</span>
+        </div>
+        <div class="domain-body">
+          <div class="goal-line">Physical and environmental wellness as a foundation.</div>
+          <ul class="items-list">
+            <li>Gym — PPL split</li>
+            <li>Calisthenics and competitive running</li>
+            <li>Glowup — skincare, grooming, diet</li>
+            <li>Meditate and journal daily</li>
+            <li>Plants, sunlight, room clean and tidy</li>
+          </ul>
+        </div>
       </div>
+
       <div class="domain" onclick="toggleCompassDomain(this)">
-        <div class="domain-header"><span class="domain-num">06</span><span class="domain-name">Expression</span><span class="domain-tag tag-make">Make</span></div>
-        <div class="domain-body"><div class="goal-line">Make things.</div><ul class="items-list"><li>Music — guitar, piano</li><li>Writing — essays, stories</li></ul></div>
+        <div class="domain-header">
+          <span class="domain-num">06</span>
+          <span class="domain-name">Expression</span>
+          <span class="domain-tag tag-make">Make</span>
+          <span class="chevron">›</span>
+        </div>
+        <div class="domain-body">
+          <div class="goal-line">Make things. Four mediums, one creative life.</div>
+          <ul class="items-list">
+            <li>Music — guitar, piano, production in FL Studio</li>
+            <li>Lyrics and poetry — Bangla songwriting</li>
+            <li>Art — drawing and sketching</li>
+            <li>Writing — essays, stories, whatever comes</li>
+          </ul>
+        </div>
       </div>
+
       <div class="domain" onclick="toggleCompassDomain(this)">
-        <div class="domain-header"><span class="domain-num">07</span><span class="domain-name">Responsibilities</span><span class="domain-tag tag-duty">Duty</span></div>
-        <div class="domain-body"><div class="goal-line">Show up for your people.</div><ul class="items-list"><li>Family — groceries, massage at night</li><li>Friends — treating them well</li></ul></div>
+        <div class="domain-header">
+          <span class="domain-num">07</span>
+          <span class="domain-name">Responsibilities</span>
+          <span class="domain-tag tag-duty">Duty</span>
+          <span class="chevron">›</span>
+        </div>
+        <div class="domain-body">
+          <div class="goal-line">Show up for yourself, your family, and your people.</div>
+          <ul class="items-list">
+            <li>Self — cook, wash clothes, iron, manage yourself</li>
+            <li>Family — water bottles, salad, groceries, dishes, massage at night</li>
+            <li>Friends — occasional favors and treating them well</li>
+            <li>Later — carry them financially, Inshallah</li>
+          </ul>
+        </div>
       </div>
+
       <div class="domain" onclick="toggleCompassDomain(this)">
-        <div class="domain-header"><span class="domain-num">08</span><span class="domain-name">Deen</span><span class="domain-tag tag-faith">Faith</span></div>
-        <div class="domain-body"><div class="goal-line">Practice and understand.</div><ul class="items-list"><li>Five prayers consistently</li><li>Quran and Hadith</li></ul></div>
+        <div class="domain-header">
+          <span class="domain-num">08</span>
+          <span class="domain-name">Deen</span>
+          <span class="domain-tag tag-faith">Faith</span>
+          <span class="chevron">›</span>
+        </div>
+        <div class="domain-body">
+          <div class="goal-line">Practice and understand — not just ritual.</div>
+          <ul class="items-list">
+            <li>Five prayers, consistently</li>
+            <li>Quran and Hadith — reading with understanding</li>
+            <li>Scholars — listening and learning actively</li>
+          </ul>
+        </div>
       </div>
+
       <div class="domain" onclick="toggleCompassDomain(this)">
-        <div class="domain-header"><span class="domain-num">09</span><span class="domain-name">Developmental Habits</span><span class="domain-tag tag-mind">Mind</span></div>
-        <div class="domain-body"><div class="goal-line">Sharpen the mind.</div><ul class="items-list"><li>Read daily, summarize</li><li>Chess — puzzles and mistakes</li></ul></div>
+        <div class="domain-header">
+          <span class="domain-num">09</span>
+          <span class="domain-name">Developmental Habits</span>
+          <span class="domain-tag tag-mind">Mind</span>
+          <span class="chevron">›</span>
+        </div>
+        <div class="domain-body">
+          <div class="goal-line">Sharpen the mind the way gym sharpens the body.</div>
+          <ul class="items-list">
+            <li>Read daily — difficult material, then summarize it</li>
+            <li>Vocabulary — from reading, GMAT, and books</li>
+            <li>Write essays weekly</li>
+            <li>Impromptu speaking and debating ideas</li>
+            <li>Chess — puzzles and analyzing mistakes</li>
+            <li>Fermi estimates and mental math</li>
+            <li>Teach what you learn — explain it simply</li>
+            <li>Decision and prediction journal</li>
+          </ul>
+        </div>
       </div>
+
       <div class="domain" onclick="toggleCompassDomain(this)">
-        <div class="domain-header"><span class="domain-num">10</span><span class="domain-name">Fun</span><span class="domain-tag tag-fun">Rest</span></div>
-        <div class="domain-body"><div class="goal-line">Guilt-free recharge.</div><ul class="items-list"><li>Adda with friends</li><li>Mental health podcasts</li></ul></div>
+        <div class="domain-header">
+          <span class="domain-num">10</span>
+          <span class="domain-name">Fun</span>
+          <span class="domain-tag tag-fun">Rest</span>
+          <span class="chevron">›</span>
+        </div>
+        <div class="domain-body">
+          <div class="goal-line">Guilt-free recharge. This is not optional.</div>
+          <ul class="items-list">
+            <li>Humor — funny content, videos, podcasts</li>
+            <li>Adda with friends — unstructured time</li>
+            <li>Eat out once a week</li>
+            <li>Mental health podcasts</li>
+          </ul>
+        </div>
       </div>
+
     </div>
+
     <div class="divider"></div>
     <div class="footer">Read once a week. Not a checklist — a compass.</div>
   </div>
 </div>
 
-</div>
-
-<nav id="tab-nav">
+</div><nav id="tab-nav">
   <button class="tab-btn active" onclick="switchTab('schedule', this)"><span class="tab-icon">📅</span>Schedule</button>
   <button class="tab-btn" onclick="switchTab('night', this)"><span class="tab-icon">🌙</span>Task Mgr</button>
   <button class="tab-btn" onclick="switchTab('dopamine', this)"><span class="tab-icon">⚡</span>Rules</button>
@@ -1287,25 +1508,20 @@ select option { background: var(--surface2); }
 
 <script>
 // =============================================
-// SUPABASE REALTIME SYNC (Cross-Device Fixed)
+// ROBUST SYNC SYSTEM (Dual-Write: Offline + Cloud)
 // =============================================
-const SUPABASE_URL = 'https://bjnexvtnauiseehorfaq.supabase.co';
-const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJqbmV4dnRuYXVpc2VlaG9yZmFxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg4NDQyMjAsImV4cCI6MjA5NDQyMDIyMH0.lsRBa4gNnzIOyF_mw6xK4MXHR134I0qYPd_ICQQXWVM';
-
 const AppSync = {
   client: null,
   isSyncing: false,
+  hasHydrated: false,
   mySessionId: Math.random().toString(36).substring(2, 15),
-
-  setSyncBadge(text, stateClass) {
-    const el = document.getElementById('sync-status');
-    if (!el) return;
-    el.textContent = text;
-    el.className = 'sync-badge ' + (stateClass || '');
-  },
+  pendingSave: false,
 
   init() {
+    // 1. Instantly read local storage so the state is hydrated BEFORE any saves can happen
     this.loadLocalInstantly();
+
+    // 2. Start the slow Supabase import in the background
     this.connectCloud();
   },
 
@@ -1316,45 +1532,52 @@ const AppSync = {
         const localData = JSON.parse(localRaw);
         this.applyState(localData);
       } catch(e) {
+        console.error("Local storage parsing failed", e);
         this.reRenderAll();
       }
     } else {
       this.reRenderAll();
     }
+    this.hasHydrated = true;
   },
 
-  connectCloud() {
+  async connectCloud() {
     try {
-      this.client = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+      const { createClient } = await import('https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm');
+      this.client = createClient(
+        'https://bjnexvtnauiseehorfaq.supabase.co',
+        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJqbmV4dnRuYXVpc2VlaG9yZmFxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg4NDQyMjAsImV4cCI6MjA5NDQyMDIyMH0.lsRBa4gNnzIOyF_mw6xK4MXHR134I0qYPd_ICQQXWVM'
+      );
       this.syncWithCloud();
       this.subscribe();
-    } catch(e) {
-      this.setSyncBadge('☁️ Local OS', 'synced');
+    } catch (e) {
+      console.warn("Supabase import failed. Running strictly offline.", e);
     }
   },
 
   syncWithCloud() {
     if (!this.client) return;
-    this.setSyncBadge('☁️ Syncing...', 'syncing');
-    
     this.client.from('planner_state').select('data').eq('id', 'maher').single()
-      .then(({ data }) => {
-        if (data && data.data) {
-          localStorage.setItem('maher_planner_state', JSON.stringify(data.data));
-          this.applyState(data.data);
-          this.setSyncBadge('☁️ Synced', 'synced');
-        } else {
+      .then(({ data, error }) => {
+        if (this.pendingSave) {
+          // The user made a change while Supabase was loading. Push our local state to the cloud.
+          this.saveToCloud();
+          this.pendingSave = false;
+        } else if (data && data.data) {
+          // No local changes were made. Safely pull down cloud data to ensure cross-device sync.
+          const cloudData = data.data;
+          localStorage.setItem('maher_planner_state', JSON.stringify(cloudData));
+          this.applyState(cloudData);
+        } else if (!error) {
+          // First time ever saving to DB
           this.saveToCloud();
         }
       })
-      .catch(e => {
-        this.setSyncBadge('☁️ Local OS', 'synced');
-      });
+      .catch(e => console.warn("Background cloud sync failed.", e));
   },
 
-  saveToCloud() {
-    if (this.isSyncing) return;
-    this.setSyncBadge('☁️ Saving...', 'syncing');
+  async saveToCloud() {
+    if (this.isSyncing || !this.hasHydrated) return; // Crucial lock
 
     const fullState = {
       session_id: this.mySessionId,
@@ -1380,16 +1603,15 @@ const AppSync = {
     localStorage.setItem('maher_planner_state', JSON.stringify(fullState));
 
     if (this.client) {
-      this.client.from('planner_state').upsert({ id: 'maher', data: fullState })
-        .then(({error}) => {
-          if (!error) this.setSyncBadge('☁️ Synced', 'synced');
-          else this.setSyncBadge('☁️ DB Error', 'error');
-        });
+      this.client.from('planner_state').upsert({ id: 'maher', data: fullState }).catch(e => console.warn(e));
+    } else {
+      this.pendingSave = true;
     }
   },
 
   applyState(data) {
     this.isSyncing = true;
+    
     try {
       if (data.planner) {
         currentWake = data.planner.wake || '06:00';
@@ -1410,13 +1632,12 @@ const AppSync = {
       }
 
       if (data.engine && typeof Engine !== 'undefined') {
-        Engine.state.lastResetDate = data.engine.lastResetDate || Engine.getLogicalDate();
+        Engine.state.lastResetDate = data.engine.lastResetDate || Engine.state.lastResetDate;
         Engine.state.habits = data.engine.habits || Engine.state.habits;
         Engine.state.looksmaxing = data.engine.looksmaxing || Engine.state.looksmaxing;
         Engine.state.badHabits = data.engine.badHabits || Engine.state.badHabits;
         Engine.state.prayers = data.engine.prayers || Engine.state.prayers;
-        Engine.state.diet = data.engine.diet || [];
-        Engine.checkReset();
+        Engine.state.diet = data.engine.diet || Engine.state.diet;
       }
       
       if (data.growth && typeof GrowthSystem !== 'undefined') {
@@ -1428,6 +1649,14 @@ const AppSync = {
         GoalsSystem.state.vision = data.goals.vision || '';
         GoalsSystem.state.goals = data.goals.goals || [];
         GoalsSystem.state.systems = data.goals.systems || [];
+        GoalsSystem.state.lastSysDate = data.goals.lastSysDate || '';
+
+        const dStr = new Date().toDateString();
+        if (GoalsSystem.state.lastSysDate !== dStr) {
+          (GoalsSystem.state.systems || []).forEach(sys => { if(!sys.doneToday) sys.streak = 0; sys.doneToday = false; });
+          GoalsSystem.state.lastSysDate = dStr;
+          setTimeout(() => this.saveToCloud(), 100);
+        }
       }
       
       if (data.review && typeof ReviewSystem !== 'undefined') {
@@ -1440,8 +1669,10 @@ const AppSync = {
       }
 
       this.reRenderAll();
+    } catch (e) {
+      console.error("Hydration Crash Detected:", e);
     } finally {
-      this.isSyncing = false;
+      this.isSyncing = false; 
     }
   },
 
@@ -1458,23 +1689,37 @@ const AppSync = {
     if (typeof renderEventsAndTasks === 'function') renderEventsAndTasks();
     if (typeof updateTasksCount === 'function') updateTasksCount();
     if (typeof renderApiStatus === 'function') renderApiStatus();
-    
-    if (typeof Engine !== 'undefined') Engine.renderAll();
-    if (typeof GrowthSystem !== 'undefined') GrowthSystem.renderAll();
-    if (typeof GoalsSystem !== 'undefined') GoalsSystem.renderAll();
-    if (typeof ReviewSystem !== 'undefined') ReviewSystem.init();
-    if (typeof RevisionSystem !== 'undefined') RevisionSystem.renderAll();
+
+    if (typeof Engine !== 'undefined' && Engine.renderAll) Engine.renderAll();
+    if (typeof GrowthSystem !== 'undefined' && GrowthSystem.renderAll) GrowthSystem.renderAll();
+    if (typeof GoalsSystem !== 'undefined' && GoalsSystem.renderAll) {
+      const va = document.getElementById('vision-text');
+      if (va) va.value = GoalsSystem.state.vision || '';
+      GoalsSystem.renderAll();
+    }
+    if (typeof ReviewSystem !== 'undefined' && ReviewSystem.renderRatings) {
+      ['well', 'waste', 'improve'].forEach(k => {
+        const el = document.getElementById(`j-${k}`);
+        if (el) el.value = ReviewSystem.state.journal[k] || '';
+      });
+      ReviewSystem.renderRatings();
+      ReviewSystem.generateLocalSummary();
+    }
+    if (typeof RevisionSystem !== 'undefined' && RevisionSystem.renderAll) RevisionSystem.renderAll();
   },
 
   subscribe() {
-    if (!this.client) return;
     this.client.channel('planner_sync')
       .on('postgres_changes', { event: '*', schema: 'public', table: 'planner_state' }, payload => {
         if (payload.new && payload.new.data) {
-          if (payload.new.data.session_id === this.mySessionId) return;
+          const incomingSessionId = payload.new.data.session_id;
+          
+          // If the data came from THIS very browser tab, ignore it to prevent UI flickering/echoes
+          if (incomingSessionId === this.mySessionId) return;
+          
+          // Data came from a different device (phone vs PC). Apply it instantly!
           localStorage.setItem('maher_planner_state', JSON.stringify(payload.new.data));
           this.applyState(payload.new.data);
-          this.setSyncBadge('☁️ Synced', 'synced');
         }
       })
       .subscribe();
@@ -1482,27 +1727,67 @@ const AppSync = {
 };
 
 // =============================================
-// GLOBAL CORE CLOCK
+// STATE & CONSTANTS
+// =============================================
+let scheduleBlocks = [];
+let done = [];
+let removed = [];
+let currentMood = 'ok';
+let currentWake = '06:00';
+let userEvents = [];
+let userTasks = [];
+let taskGroups = [];
+let selectedPriority = 'med';
+let apiKey = '';
+
+let prayerTimes = {
+  fajr: '05:05', sunrise: '06:20', dhuhr: '12:10',
+  asr: '15:45', maghrib: '18:18', isha: '19:30'
+};
+
+// =============================================
+// GLOBAL INIT
 // =============================================
 window.addEventListener('load', () => {
-  AppSync.init();
-
+  // 1. INSTANT TAB RESTORATION
   const lastTab = localStorage.getItem('maher_active_tab') || 'schedule';
   const tabBtn = document.querySelector(`.tab-btn[onclick*="'${lastTab}'"]`);
-  if (tabBtn) window.switchTab(lastTab, tabBtn);
+  if (tabBtn) {
+    document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById(`tab-${lastTab}`).classList.add('active');
+    tabBtn.classList.add('active');
+  }
 
+  // 2. SYNCHRONOUS HYDRATION
+  AppSync.init();
+
+  // 3. SET UP CORE UI
   updateClock();
   setInterval(updateClock, 1000);
   setInterval(updateActiveBlock, 60000);
   renderDayDate();
   renderDopamineRules();
-  fetchPrayerTimes();
 
   if (typeof Engine !== 'undefined') {
+    Engine.checkReset();
     setInterval(() => Engine.checkReset(), 60000);
   }
+  if (typeof GrowthSystem !== 'undefined') GrowthSystem.init();
+  if (typeof GoalsSystem !== 'undefined') GoalsSystem.init();
+  if (typeof ReviewSystem !== 'undefined') ReviewSystem.init();
+  if (typeof RevisionSystem !== 'undefined') RevisionSystem.init();
+  
+  // 4. ASYNC FETCHES
+  fetchPrayerTimes();
 });
 
+function loadStorage() { }
+function saveStorage() { AppSync.saveToCloud(); }
+
+// =============================================
+// CLOCK
+// =============================================
 function updateClock() {
   const now = new Date();
   const h = now.getHours();
@@ -1520,6 +1805,9 @@ function renderDayDate() {
     now.toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long' });
 }
 
+// =============================================
+// PRAYER TIMES (Aladhan API)
+// =============================================
 async function fetchPrayerTimes() {
   try {
     const today = new Date();
@@ -1545,8 +1833,10 @@ function renderPrayerStrip() {
     { key: 'fajr', label: 'Fajr' }, { key: 'sunrise', label: 'Sunrise' }, { key: 'dhuhr', label: 'Dhuhr' },
     { key: 'asr', label: 'Asr' }, { key: 'maghrib', label: 'Maghrib' }, { key: 'isha', label: 'Isha' }
   ];
+
   const now = new Date();
   const nowMin = now.getHours() * 60 + now.getMinutes();
+
   let nextPrayerKey = null;
   for (const p of prayers) {
     const t = prayerTimes[p.key];
@@ -1555,6 +1845,7 @@ function renderPrayerStrip() {
       if (ph * 60 + pm > nowMin) { nextPrayerKey = p.key; break; }
     }
   }
+
   strip.innerHTML = prayers.map(p => {
     const time = prayerTimes[p.key] || '--:--';
     const display = formatTime24(time);
@@ -1574,7 +1865,11 @@ function formatTime24(t24) {
   return `${dh}:${m.toString().padStart(2,'0')}${ampm}`;
 }
 
-function toMins(t) { const [h, m] = t.split(':').map(Number); return h * 60 + m; }
+function toMins(t) {
+  const [h, m] = t.split(':').map(Number);
+  return h * 60 + m;
+}
+
 function fromMins(mins) {
   const h = Math.floor(mins / 60) % 24;
   const m = mins % 60;
@@ -1582,10 +1877,14 @@ function fromMins(mins) {
 }
 
 // =============================================
-// ALGORITHMIC TIMELINE
+// SCHEDULE BUILDER
 // =============================================
 function buildSchedule() {
   const wakeMin = toMins(currentWake);
+  const h = Math.floor(wakeMin / 60);
+  const isAfternoon = h >= 13;
+  const isLateMorning = h >= 10;
+
   const FAJR = toMins(prayerTimes.fajr || '05:05');
   const DHUHR = toMins(prayerTimes.dhuhr || '12:10');
   const ASR = toMins(prayerTimes.asr || '15:45');
@@ -1599,6 +1898,7 @@ function buildSchedule() {
     blocks.push({ time: fromMins(cur), rawMin: cur, name, dur, note, tag, section, fixed: false });
     cur += dur;
   }
+
   function pushAt(absMin, name, dur, note, tag, section) {
     if (absMin > cur) cur = absMin;
     blocks.push({ time: fromMins(cur), rawMin: cur, name, dur, note, tag, section, fixed: true });
@@ -1606,43 +1906,131 @@ function buildSchedule() {
   }
 
   push('☀️ Wake up', 5, 'No phone. Just get up.', 'core', 'Morning');
-  if (wakeMin <= FAJR + 5) pushAt(FAJR, '🕌 Fajr', 20, '', 'prayer', 'Morning');
-  else push('🕌 Qadha Fajr', 20, 'Pray qadha immediately.', 'prayer', 'Morning');
 
-  push('🧴 Morning skincare', 10, 'Cleanse → SPF', 'low', 'Morning');
-  push('🌿 Walk & sunlight', 25, '20 min walk. Greet the day.', 'low', 'Morning');
-  push('💻 Deep Work Block 1', 90, 'Focus on the build.', 'core', 'Work');
-  push('🏋️ Gym', 120, '2 hours. Workout + shower.', 'gym', 'Body');
+  if (!isAfternoon) {
+    if (wakeMin <= FAJR + 5) {
+      pushAt(FAJR, '🕌 Fajr', 20, '', 'prayer', 'Morning');
+    } else if (wakeMin <= DHUHR - 30) {
+      push('🕌 Qadha Fajr', 20, 'Missed Fajr — pray qadha immediately. No delay.', 'prayer', 'Morning');
+    }
+    push('🧴 Morning skincare', 10, 'Cleanse → tone → moisturize → SPF. 10 min.', 'low', 'Morning');
+    push('🌿 Walk & sunlight', 25, '20–25 min outside. No phone. Water plants, refill bottles. Greet the day.', 'low', 'Morning');
+
+    if (!isLateMorning) {
+      push('💻 Deep Work Block 1 — Startup / SQL', 90, 'No internet, no distractions. Focus on the build.', 'core', 'Work');
+      push('🏋️ Gym', 120, '2 hours. Workout + shower after.', 'gym', 'Body');
+    } else {
+      push('💻 Deep Work Block 1', 60, 'Late start — compressed to 60 min.', 'core', 'Work');
+    }
+  } else {
+    blocks.push({ time: fromMins(cur), rawMin: cur, name: '⚠️ Damage Control Mode', dur: 0, note: 'Very late start. Protect what matters: gym, one work block, prayers, family time, night routine. That is a win.', tag: 'med', section: 'Morning', fixed: false });
+    push('🕌 Qadha Fajr + Dhuhr', 25, 'Pray both immediately. Then move.', 'prayer', 'Morning');
+  }
 
   pushAt(DHUHR, '🕌 Dhuhr', 15, '', 'prayer', 'Midday');
-  push('💤 Nap (Qailulah)', 30, 'Sunnah + brain reset.', 'low', 'Midday');
-  push('💻 Deep Work Block 2', 90, 'Stay locked in.', 'core', 'Work');
+  push('💤 Nap (Qailulah)', 30, '20–30 min. Sunnah + brain reset.', 'low', 'Midday');
 
-  const fixedEvList = userEvents.filter(e => e.time && !e.completed).map(e => ({ ...e, rawMin: toMins(e.time) })).sort((a, b) => a.rawMin - b.rawMin);
-  const flexTasks = [...userTasks.filter(t => !t.completed)];
+  if (!isAfternoon) {
+    push('💻 Deep Work Block 2 — Startup / SQL', 90, 'Second focused block. Stay locked in.', 'core', 'Work');
+  } else {
+    push('💻 Deep Work Block 1 — Startup / SQL', 60, 'Give it what you have. 60 min.', 'core', 'Work');
+    push('🏋️ Gym (if possible)', 90, 'Even 1 hour is a win today.', 'gym', 'Body');
+  }
+
+  push('🧠 Active consumption', 60, 'Read, podcast, or watch something that teaches. Write 3 lines of what you learned.', 'med', 'Afternoon');
+  push('🍽️ Dishes after lunch', 15, 'Keep the house clean.', 'family', 'Afternoon');
+
+  const fixedEvList = userEvents
+    .filter(e => e.time && e.time !== '' && !e.completed)
+    .map(e => ({ ...e, rawMin: toMins(e.time) }))
+    .sort((a, b) => a.rawMin - b.rawMin);
+
+  const flexTasks = [
+    ...userTasks.filter(t => !t.completed),
+    ...userEvents.filter(e => (!e.time || e.time === '') && !e.completed).map(e => ({ name: e.name, dur: e.dur || 30, priority: 'med' }))
+  ];
+
   const prayerWindows = [
     { name: '🕌 Asr', min: ASR, dur: 15, tag: 'prayer', section: 'Afternoon' },
-    { name: '☕ Chai + Maghrib', min: MAGHRIB, dur: 30, tag: 'family', section: 'Evening' },
+    { name: '☕ Chai for parents + Maghrib', min: MAGHRIB, dur: 30, tag: 'family', section: 'Evening' },
     { name: '🕌 Isha', min: ISHA, dur: 20, tag: 'prayer', section: 'Night' },
   ];
 
-  const hardPoints = [...fixedEvList.map(e => ({ type: 'event', data: e, min: e.rawMin })), ...prayerWindows.map(p => ({ type: 'prayer', data: p, min: p.min }))].sort((a, b) => a.min - b.min);
+  const hardPoints = [
+    ...fixedEvList.map(e => ({ type: 'event', data: e, min: e.rawMin })),
+    ...prayerWindows.map(p => ({ type: 'prayer', data: p, min: p.min }))
+  ].sort((a, b) => a.min - b.min);
+
+  const blockedPrayers = new Set();
+
+  function insertTasksBefore(limitMin) {
+    while (flexTasks.length > 0) {
+      const t = flexTasks[0];
+      if (cur + t.dur > limitMin) break;
+      flexTasks.shift();
+      push(`📌 ${t.name}`, t.dur, `Priority: ${t.priority || 'med'}`, t.cat === 'core' ? 'core' : 'low', 'Tasks');
+    }
+  }
 
   for (const point of hardPoints) {
-    while (flexTasks.length > 0 && cur + flexTasks[0].dur <= point.min) {
-      const t = flexTasks.shift();
-      push(`📌 ${t.name}`, t.dur, `Priority: ${t.priority || 'med'}`, 'low', 'Tasks');
-    }
     if (point.type === 'event') {
       const e = point.data;
+      insertTasksBefore(e.rawMin);
+
+      for (const p of prayerWindows) {
+        if (!blockedPrayers.has(p.name) && e.rawMin <= p.min && (e.rawMin + e.dur) > p.min) {
+          blockedPrayers.add(p.name);
+        }
+      }
+
       if (e.rawMin > cur) cur = e.rawMin;
-      blocks.push({ time: fromMins(e.rawMin), rawMin: e.rawMin, name: `📌 ${e.name}`, dur: e.dur, note: 'Fixed event', tag: 'high', section: 'Events', fixed: true, isEvent: true });
-      cur = e.rawMin + e.dur;
-    } else {
+      const eventEndMin = e.rawMin + e.dur;
+
+      const qadhaPrayers = prayerWindows
+        .filter(p => !blockedPrayers.has(p.name + '_done') && p.min >= e.rawMin && p.min < eventEndMin)
+        .map(p => p.name.replace(/☕.*?\+\s*/, '').replace('🕌 ', ''));
+
+      const eventNote = qadhaPrayers.length > 0
+        ? `Fixed event. ${qadhaPrayers.join(', ')} falls during this — pray qadha immediately after.`
+        : 'Fixed event — your routine adapts around this.';
+
+      blocks.push({
+        time: fromMins(e.rawMin), rawMin: e.rawMin,
+        name: `📌 ${e.name}`, dur: e.dur,
+        note: eventNote, tag: 'high', section: 'Events', fixed: true, isEvent: true
+      });
+      cur = eventEndMin;
+
+      for (const p of prayerWindows) {
+        if (blockedPrayers.has(p.name)) continue;
+        if (p.min >= e.rawMin && p.min < eventEndMin) {
+          blockedPrayers.add(p.name);
+          const qadhaPrayerName = p.name.replace('☕ Chai for parents + Maghrib', '🕌 Maghrib');
+          blocks.push({
+            time: fromMins(cur), rawMin: cur,
+            name: `${qadhaPrayerName} (Qadha)`, dur: p.tag === 'family' ? 15 : p.dur,
+            note: 'Prayer was during your fixed event — pray qadha now immediately.', tag: 'prayer', section: 'Events', fixed: false
+          });
+          cur += p.tag === 'family' ? 15 : p.dur;
+        }
+      }
+
+    } else if (point.type === 'prayer') {
       const p = point.data;
+      if (blockedPrayers.has(p.name)) continue;
+
+      insertTasksBefore(p.min);
+
       if (p.min > cur) cur = p.min;
       blocks.push({ time: fromMins(cur), rawMin: cur, name: p.name, dur: p.dur, note: '', tag: p.tag, section: p.section, fixed: true });
       cur += p.dur;
+
+      if (p.name.includes('Asr')) {
+        push('👨‍👩‍👦 Family time / text a friend', 45, 'Sit with them. No agenda needed.', 'family', 'Afternoon');
+      } else if (p.name.includes('Maghrib')) {
+        push('🍽️ Dinner + free time', 60, 'Medium dopamine OK. Chess, reading, music.', 'med', 'Evening');
+        push('📊 Startup light review', 20, '15–20 min. What moved today? One thing for tomorrow.', 'core', 'Evening');
+      }
     }
   }
 
@@ -1650,30 +2038,59 @@ function buildSchedule() {
     const t = flexTasks.shift();
     push(`📌 ${t.name}`, t.dur, `Priority: ${t.priority || 'med'}`, 'low', 'Tasks');
   }
+  push('🗣️ Adda — friends & connection', 120, '2 hours. High dopamine allowed here. Be present.', 'high', 'Night');
+  push('🌙 Night routine', 60, 'Journal → Quran / Arabic / Hadith → Stretch → Meditate → Phone in kitchen', 'low', 'Night');
+  push('😴 Sleep', 0, 'Target: 12 AM. Tomorrow starts tonight.', 'core', 'Night');
 
-  push('🗣️ Adda — Friends & family', 120, 'High dopamine allowed here.', 'high', 'Night');
-  push('🌙 Night routine', 60, 'Journal → Quran → Sleep', 'low', 'Night');
+  try {
+    if (AppSync.blockNotesTemp && AppSync.blockNotesTemp.length === blocks.length) {
+      blocks.forEach((b, i) => b.userNote = AppSync.blockNotesTemp[i]);
+    }
+  } catch(e) {}
 
   scheduleBlocks = blocks;
+
   if (done.length !== blocks.length) {
     done = blocks.map(() => false);
     removed = blocks.map(() => false);
   }
 
+  renderDayNote();
   renderTimeline();
   updateProgress();
+  renderPrayerStrip();
+  saveStorage();
+}
+
+function renderDayNote() {
+  const h = Math.floor(toMins(currentWake) / 60);
+  let note = '';
+  if (h >= 15) {
+    note = 'Very late start. Today is a recovery day. Protect gym, one work block, prayers, family time, and your night routine. That\'s a win.';
+  } else if (h >= 12) {
+    note = 'Late start — no guilt. We compress the morning and protect what matters: the two work blocks and gym. Everything else adjusts.';
+  } else if (currentMood === 'low') {
+    note = 'Low energy today — that\'s okay. The routine is lighter. Show up, don\'t perform.';
+  } else if (currentMood === 'high') {
+    note = 'High energy — a great day to push the work blocks hard and squeeze out maximum output.';
+  } else {
+    note = 'Good start. Protect the morning and the rest follows.';
+  }
+
+  document.getElementById('day-note-area').innerHTML = `<div class="day-note">${note}</div>`;
 }
 
 function renderTimeline() {
   const container = document.getElementById('timeline');
   container.innerHTML = '';
+
   const now = new Date();
   const nowMin = now.getHours() * 60 + now.getMinutes();
 
   let currentSection = '';
   scheduleBlocks.forEach((block, i) => {
     if (removed[i]) return;
-    
+
     if (block.section && block.section !== currentSection) {
       currentSection = block.section;
       const sl = document.createElement('div');
@@ -1688,260 +2105,238 @@ function renderTimeline() {
     const div = document.createElement('div');
     div.className = `tl-block${isActive ? ' is-active' : ''}${isDone ? ' is-done' : ''}`;
     div.dataset.tag = block.tag;
+    div.dataset.index = i;
+    if (block.isEvent) div.dataset.isevent = 'true';
+
+    const tagMap = {
+      prayer: 'tag-prayer', core: 'tag-core', gym: 'tag-gym',
+      family: 'tag-family', low: 'tag-low', med: 'tag-med', high: 'tag-high'
+    };
+    const tagClass = tagMap[block.tag] || 'tag-low';
+    const durLabel = block.dur > 0 ? ` · ${block.dur}m` : '';
 
     div.innerHTML = `
-      <div class="tl-time-col"><div class="tl-time">${formatTime24(block.time)}</div></div>
-      <div class="tl-dot-col"><div class="tl-dot"></div><div class="tl-line"></div></div>
+      <div class="tl-time-col">
+        <div class="tl-time">${formatTime24(block.time)}</div>
+      </div>
+      <div class="tl-dot-col">
+        <div class="tl-dot"></div>
+        <div class="tl-line"></div>
+      </div>
       <div class="tl-content">
         <div class="tl-title">${block.name}</div>
         ${block.note ? `<div class="tl-note">${block.note}</div>` : ''}
-        <span class="tl-tag tag-${block.tag}">${block.tag}${block.dur > 0 ? ` · ${block.dur}m` : ''}</span>
+        <span class="tl-tag ${tagClass}">${block.tag}${durLabel}</span>
+        ${block.userNote ? `<div class="custom-user-note">${block.userNote}</div>` : ''}
+
+        <div class="blk-actions-panel" id="ap${i}">
+          <button class="act-btn" onclick="toggleNoteEditor(${i})">📝 edit note</button>
+          ${block.dur > 0 && !block.fixed ? `<button class="act-btn" onclick="toggleDurEditor(${i})">✏️ duration</button>` : ''}
+          ${block.tag !== 'prayer' ? `<button class="act-btn" onclick="toggleReplaceForm(${i})">🔄 replace</button>` : ''}
+          <button class="act-btn gold" onclick="toggleDone(${i})">${done[i] ? '↩ undo' : '✓ done'}</button>
+          ${block.tag !== 'prayer' ? `<button class="act-btn danger" onclick="removeBlock(${i})">✕ remove</button>` : ''}
+        </div>
+
+        <div class="replace-form" id="note-form${i}">
+          <textarea id="note-in${i}" placeholder="Add your custom note here..." style="min-height:50px; font-family:'DM Sans', sans-serif;">${block.userNote || ''}</textarea>
+          <div style="display:flex;gap:6px;margin-top:6px;">
+            <button class="act-btn gold" onclick="saveUserNote(${i})">Save Note</button>
+            <button class="act-btn" onclick="toggleNoteEditor(${i})">Cancel</button>
+          </div>
+        </div>
+
+        <div class="dur-editor" id="de${i}">
+          <button class="step-btn" onclick="stepDur(${i},-5)">−</button>
+          <span class="dur-val" id="dv${i}">${block.dur} min</span>
+          <button class="step-btn" onclick="stepDur(${i},5)">+</button>
+          <button class="act-btn" onclick="applyDur(${i})">apply</button>
+          <button class="act-btn" onclick="toggleDurEditor(${i})">cancel</button>
+        </div>
+
+        <div class="replace-form" id="rf${i}">
+          <input type="text" id="ri${i}" placeholder="Replace with...">
+          <select id="rs${i}">
+            <option value="low">Rest / light</option>
+            <option value="core">Deep work</option>
+            <option value="gym">Exercise</option>
+            <option value="med">Active / medium</option>
+            <option value="family">Family / social</option>
+          </select>
+          <div style="display:flex;gap:6px">
+            <button class="act-btn gold" onclick="confirmReplace(${i})">Replace</button>
+            <button class="act-btn" onclick="toggleReplaceForm(${i})">Cancel</button>
+          </div>
+        </div>
       </div>
     `;
-    div.onclick = () => { toggleDone(i); };
+
+    div.addEventListener('click', e => {
+      if (e.target.closest('button') || e.target.closest('input') || e.target.closest('select') || e.target.closest('textarea')) return;
+      toggleActionsPanel(i);
+    });
+
     container.appendChild(div);
   });
-}
-
-function toggleDone(i) {
-  done[i] = !done[i];
-  renderTimeline();
-  updateProgress();
-  AppSync.saveToCloud();
-}
-
-function updateProgress() {
-  const total = scheduleBlocks.filter((_, i) => !removed[i]).length;
-  const doneC = scheduleBlocks.filter((_, i) => !removed[i] && done[i]).length;
-  const pct = total > 0 ? Math.round(doneC / total * 100) : 0;
-  document.getElementById('prog-text').textContent = `${doneC} / ${total} done`;
-  document.getElementById('prog-pct').textContent = pct + '%';
-  document.getElementById('prog-fill').style.width = pct + '%';
 }
 
 function updateActiveBlock() {
   const now = new Date();
   const nowMin = now.getHours() * 60 + now.getMinutes();
-  document.querySelectorAll('.tl-block').forEach((el, index) => {
-    const b = scheduleBlocks[index];
+  document.querySelectorAll('.tl-block').forEach(el => {
+    const i = parseInt(el.dataset.index);
+    if (isNaN(i)) return;
+    const b = scheduleBlocks[i];
     if (!b) return;
-    const isActive = !done[index] && b.rawMin <= nowMin && (b.rawMin + (b.dur || 30)) > nowMin;
+    const isActive = !done[i] && b.rawMin <= nowMin && (b.rawMin + (b.dur || 30)) > nowMin;
     el.classList.toggle('is-active', isActive);
   });
 }
 
+function toggleActionsPanel(i) {
+  const panel = document.getElementById(`ap${i}`);
+  if (!panel) return;
+  const isOpen = panel.classList.contains('open');
+  document.querySelectorAll('.blk-actions-panel').forEach(p => p.classList.remove('open'));
+  document.querySelectorAll('.dur-editor').forEach(d => d.classList.remove('open'));
+  document.querySelectorAll('.replace-form').forEach(r => r.classList.remove('open'));
+  if (!isOpen) panel.classList.add('open');
+}
+
+function toggleNoteEditor(i) {
+  const nf = document.getElementById(`note-form${i}`);
+  if (!nf) return;
+  nf.classList.toggle('open');
+  if (nf.classList.contains('open')) document.getElementById(`note-in${i}`).focus();
+}
+
+function saveUserNote(i) {
+  const val = document.getElementById(`note-in${i}`).value.trim();
+  scheduleBlocks[i].userNote = val;
+  saveStorage();
+  renderTimeline();
+}
+
+function toggleDurEditor(i) {
+  const de = document.getElementById(`de${i}`);
+  if (!de) return;
+  de.classList.toggle('open');
+}
+
+function toggleReplaceForm(i) {
+  const rf = document.getElementById(`rf${i}`);
+  if (!rf) return;
+  rf.classList.toggle('open');
+  if (rf.classList.contains('open')) {
+    const ri = document.getElementById(`ri${i}`);
+    if (ri) ri.focus();
+  }
+}
+
+function stepDur(i, d) {
+  const dv = document.getElementById(`dv${i}`);
+  if (!dv) return;
+  const cur = parseInt(dv.textContent);
+  dv.textContent = Math.max(5, cur + d) + ' min';
+}
+
+function applyDur(i) {
+  const dv = document.getElementById(`dv${i}`);
+  if (!dv) return;
+  const newDur = parseInt(dv.textContent);
+  scheduleBlocks[i].dur = newDur;
+  resequenceFrom(i);
+  renderTimeline();
+  updateProgress();
+  saveStorage();
+}
+
+function resequenceFrom(changedIdx) {
+  let cur = scheduleBlocks[changedIdx].rawMin + scheduleBlocks[changedIdx].dur;
+  for (let j = changedIdx + 1; j < scheduleBlocks.length; j++) {
+    if (removed[j]) continue;
+    const b = scheduleBlocks[j];
+    if (b.fixed) {
+      if (cur > b.rawMin) {
+        b.rawMin = cur;
+        b.time = fromMins(cur);
+      }
+      cur = b.rawMin + (b.dur || 0);
+    } else {
+      b.rawMin = cur;
+      b.time = fromMins(cur);
+      cur += b.dur || 0;
+    }
+  }
+}
+
+function toggleDone(i) {
+  done[i] = !done[i];
+  saveStorage();
+  renderTimeline();
+  updateProgress();
+}
+
+function removeBlock(i) {
+  removed[i] = true;
+  const savedDur = scheduleBlocks[i].dur;
+  scheduleBlocks[i].dur = 0;
+  resequenceFrom(i);
+  scheduleBlocks[i].dur = savedDur;
+  saveStorage();
+  renderTimeline();
+  updateProgress();
+}
+
+function confirmReplace(i) {
+  const ri = document.getElementById(`ri${i}`);
+  const rs = document.getElementById(`rs${i}`);
+  if (!ri || !ri.value.trim()) return;
+  scheduleBlocks[i].name = ri.value.trim();
+  scheduleBlocks[i].tag = rs.value;
+  scheduleBlocks[i].note = 'Custom block — added by you.';
+  done[i] = false;
+  renderTimeline();
+  saveStorage();
+}
+
+function updateProgress() {
+  const activeBlocks = scheduleBlocks.filter((_, i) => !removed[i]);
+  const doneCount = activeBlocks.filter((_, idx) => {
+    const realIdx = scheduleBlocks.indexOf(activeBlocks[idx]);
+    return done[realIdx];
+  }).length;
+
+  const total = scheduleBlocks.filter((_, i) => !removed[i]).length;
+  const doneC = scheduleBlocks.filter((_, i) => !removed[i] && done[i]).length;
+  const pct = total > 0 ? Math.round(doneC / total * 100) : 0;
+
+  document.getElementById('prog-text').textContent = `${doneC} / ${total} done`;
+  document.getElementById('prog-pct').textContent = pct + '%';
+  document.getElementById('prog-fill').style.width = pct + '%';
+}
+
 function onWakeChange() {
   currentWake = document.getElementById('wake-input').value;
+  done = scheduleBlocks.map(() => false);
+  removed = scheduleBlocks.map(() => false);
   buildSchedule();
-  AppSync.saveToCloud();
 }
 
 function setMood(btn, mood) {
   currentMood = mood;
   document.querySelectorAll('.mood-pill').forEach(b => b.classList.remove('sel'));
   btn.classList.add('sel');
-  AppSync.saveToCloud();
+  buildSchedule();
 }
 
 function rebuildDay() {
   done = scheduleBlocks.map(() => false);
   removed = scheduleBlocks.map(() => false);
   buildSchedule();
-  AppSync.saveToCloud();
 }
 
 // =============================================
-// ENGINE (HABIT HISTORY LOGGING + STREAKS)
-// =============================================
-const Engine = {
-  state: {
-    lastResetDate: '',
-    habits: [
-      { id: 'h1', name: 'Wake up at 6:00 AM', status: null, streak: 0, prevStreak: 0, history: {} },
-      { id: 'h2', name: 'Strategic Game (Chess/Factorio)', status: null, streak: 0, prevStreak: 0, history: {} }
-    ],
-    looksmaxing: [{ id: 'l1', name: 'Morning Skincare Routine', status: null, streak: 0, prevStreak: 0, history: {} }],
-    badHabits: [
-      { id: 'b1', name: 'Mindless Social Media Scrolling', status: null, streak: 0, prevStreak: 0, history: {} },
-      { id: 'b2', name: 'Junk Food', status: null, streak: 0, prevStreak: 0, history: {} }
-    ],
-    prayers: [
-      { id: 'p1', name: 'Fajr', status: null, streak: 0, prevStreak: 0, history: {} },
-      { id: 'p2', name: 'Dhuhr', status: null, streak: 0, prevStreak: 0, history: {} },
-      { id: 'p3', name: 'Asr', status: null, streak: 0, prevStreak: 0, history: {} },
-      { id: 'p4', name: 'Maghrib', status: null, streak: 0, prevStreak: 0, history: {} },
-      { id: 'p5', name: 'Isha', status: null, streak: 0, prevStreak: 0, history: {} }
-    ],
-    diet: [],
-  },
-
-  getLogicalDate() {
-    const d = new Date(Date.now() - 1 * 60 * 60 * 1000);
-    return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
-  },
-
-  checkReset() {
-    const currentLogical = this.getLogicalDate();
-    if (!this.state.lastResetDate) {
-      this.state.lastResetDate = currentLogical;
-      return;
-    }
-    if (this.state.lastResetDate !== currentLogical) {
-      this.executeDailyReset(currentLogical);
-    }
-  },
-
-  executeDailyReset(newLogicalDate) {
-    const lists = ['habits', 'looksmaxing', 'badHabits', 'prayers'];
-    const d1 = new Date(this.state.lastResetDate);
-    const d2 = new Date(newLogicalDate);
-    const diffDays = Math.round((d2 - d1) / (1000 * 60 * 60 * 24));
-
-    lists.forEach(key => {
-      (this.state[key] || []).forEach(item => {
-        if (diffDays === 1) {
-          if (item.status !== 'done') item.streak = 0;
-        } else {
-          item.streak = 0;
-        }
-        item.status = null; 
-        item.prevStreak = item.streak;
-      });
-    });
-
-    this.state.diet = [];
-    this.state.lastResetDate = newLogicalDate;
-    this.renderAll();
-    AppSync.saveToCloud();
-  },
-
-  addItem(listKey, inputId) {
-    const input = document.getElementById(inputId);
-    const name = input.value.trim();
-    if (name) {
-      if (!this.state[listKey]) this.state[listKey] = [];
-      this.state[listKey].push({ id: Date.now().toString(), name, status: null, streak: 0, prevStreak: 0, history: {} });
-      input.value = '';
-      this.renderAll();
-      AppSync.saveToCloud();
-    }
-  },
-
-  removeItem(listKey, id) {
-    if (this.state[listKey]) {
-      this.state[listKey] = this.state[listKey].filter(i => i.id !== id);
-      this.renderAll();
-      AppSync.saveToCloud();
-    }
-  },
-
-  logAction(listKey, id, action) {
-    const list = this.state[listKey] || [];
-    const item = list.find(i => i.id === id);
-    if (!item) return;
-    
-    if (!item.history) item.history = {};
-    const today = this.getLogicalDate();
-
-    if (action === 'tick') {
-      if (item.status !== 'done') {
-        item.prevStreak = item.streak;
-        item.streak++;
-        item.status = 'done';
-        item.history[today] = 'done';
-      }
-    } else if (action === 'cross') {
-      if (item.status !== 'failed') {
-        item.prevStreak = item.streak;
-        item.streak = 0;
-        item.status = 'failed';
-        item.history[today] = 'failed';
-      }
-    } else if (action === 'undo') {
-      item.streak = item.prevStreak !== undefined ? item.prevStreak : 0;
-      item.status = null;
-      delete item.history[today];
-    }
-    this.renderAll();
-    AppSync.saveToCloud();
-  },
-
-  logDiet() {
-    const time = document.getElementById('diet-time').value;
-    const item = document.getElementById('diet-item').value;
-    if (time && item) {
-      if (!this.state.diet) this.state.diet = [];
-      this.state.diet.push({ time, item });
-      this.state.diet.sort((a,b) => a.time.localeCompare(b.time));
-      document.getElementById('diet-item').value = '';
-      this.renderDiet();
-      AppSync.saveToCloud();
-    }
-  },
-
-  renderAll() {
-    this.renderTrackerList('habits-list', 'habits');
-    this.renderTrackerList('looksmaxing-list', 'looksmaxing');
-    this.renderTrackerList('badHabits-list', 'badHabits');
-    this.renderTrackerList('prayers-list', 'prayers');
-    this.renderDiet();
-  },
-
-  renderTrackerList(containerId, listKey) {
-    const el = document.getElementById(containerId);
-    if (!el) return;
-    const list = this.state[listKey] || [];
-    const currentMonth = this.getLogicalDate().substring(0, 7);
-
-    el.innerHTML = list.map(i => {
-      let monthCount = 0;
-      let totalCount = 0;
-      
-      if (i.history) {
-          Object.entries(i.history).forEach(([date, state]) => {
-              if (state === 'done') {
-                  totalCount++;
-                  if (date.startsWith(currentMonth)) monthCount++;
-              }
-          });
-      } else {
-          totalCount = i.status === 'done' ? Math.max(i.streak, 1) : i.streak;
-          monthCount = totalCount;
-      }
-
-      return `
-      <div class="track-row">
-        <div class="track-info">
-          <div class="track-title" style="${i.status === 'done' ? 'text-decoration:line-through; color:var(--text3)' : ''}">${i.name}</div>
-          <div class="track-stats" style="font-family:'DM Mono', monospace; font-size:10px; color:var(--text3); margin-top:6px;">
-            🔥 Streak: <span style="color:var(--gold-dim); font-weight:bold;">${i.streak}</span>
-            <span style="margin:0 6px; color:var(--border2)">|</span>
-            📊 This Month: <span style="color:var(--sky)">${monthCount}</span>
-            <span style="margin:0 6px; color:var(--border2)">|</span>
-            Total: <span style="color:var(--teal)">${totalCount}</span>
-          </div>
-        </div>
-        <div class="track-actions">
-          <button class="btn-check-eng ${i.status === 'done' ? 'done' : ''}" onclick="Engine.logAction('${listKey}', '${i.id}', 'tick')">✓</button>
-          <button class="btn-check-eng ${i.status === 'failed' ? 'fail' : ''}" onclick="Engine.logAction('${listKey}', '${i.id}', 'cross')">✕</button>
-          <button class="btn-check-eng" onclick="Engine.logAction('${listKey}', '${i.id}', 'undo')">↺</button>
-          <button class="btn-check-eng" style="border:none; background:none;" onclick="Engine.removeItem('${listKey}', '${i.id}')">🗑️</button>
-        </div>
-      </div>
-      `;
-    }).join('');
-  },
-
-  renderDiet() {
-    const el = document.getElementById('diet-list');
-    if (!el) return;
-    const list = this.state.diet || [];
-    el.innerHTML = list.length ? list.map(d => `<div style="padding:6px 0;border-bottom:1px solid var(--border2)">[${d.time}] ${d.item}</div>`).join('') : 'No logs today.';
-  }
-};
-
-// =============================================
-// REPEATABLE ROUTINE MANAGEMENT
+// TASK MANAGER
 // =============================================
 function renderTaskGroups() {
   const container = document.getElementById('task-groups-container');
@@ -1991,14 +2386,14 @@ function addTaskGroup() {
   if (title) {
     taskGroups.push({ id: Date.now().toString(), title, tasks: [] });
     input.value = '';
-    AppSync.saveToCloud();
+    saveStorage();
     renderTaskGroups();
   }
 }
 
 function deleteTaskGroup(groupId) {
   taskGroups = taskGroups.filter(g => g.id !== groupId);
-  AppSync.saveToCloud();
+  saveStorage();
   renderTaskGroups();
 }
 
@@ -2006,7 +2401,7 @@ function resetTaskGroup(groupId) {
   const group = taskGroups.find(g => g.id === groupId);
   if (group) {
     group.tasks.forEach(t => t.done = false);
-    AppSync.saveToCloud();
+    saveStorage();
     renderTaskGroups();
   }
 }
@@ -2019,7 +2414,7 @@ function addTaskToGroup(groupId) {
   if (name) {
     group.tasks.push({ id: Date.now().toString(), name, done: false });
     input.value = '';
-    AppSync.saveToCloud();
+    saveStorage();
     renderTaskGroups();
   }
 }
@@ -2028,7 +2423,7 @@ function deleteGroupTask(groupId, taskId) {
   const group = taskGroups.find(g => g.id === groupId);
   if (group) {
     group.tasks = group.tasks.filter(t => t.id !== taskId);
-    AppSync.saveToCloud();
+    saveStorage();
     renderTaskGroups();
   }
 }
@@ -2038,7 +2433,7 @@ function toggleGroupTask(groupId, taskId) {
   if (group) {
     const task = group.tasks.find(t => t.id === taskId);
     if (task) task.done = !task.done;
-    AppSync.saveToCloud();
+    saveStorage();
     renderTaskGroups();
   }
 }
@@ -2048,22 +2443,65 @@ function toggleGroupTask(groupId, taskId) {
 // =============================================
 function renderDopamineRules() {
   const rules = [
-    { title: '⚡ Dopamine Fast', items: [{ text: 'Do not touch rewards until major work is done.', cls: 'rule-red' }, { text: 'During fast: Books, Chess, Poetry, Guitar only.', cls: 'rule-green' }] },
-    { title: '🛡️ Firewall Rules', items: [{ text: 'PMO — Zero tolerance.', cls: 'rule-red' }, { text: 'Planning instead of acting is forbidden.', cls: 'rule-red' }] },
-    { title: '🧱 The Domino Law', items: [{ text: 'If one habit breaks — you carry on with everything else.', cls: 'rule-green' }] }
+    {
+      title: '⚡ Dopamine Fast',
+      items: [
+        { text: 'Do not touch rewards until major work is done. Every day. No exceptions, no negotiation.', cls: 'rule-red' },
+        { text: '<b>During fast — only these are allowed:</b>', cls: '' },
+        { text: 'Read (books, not feeds)', cls: 'rule-green' },
+        { text: 'Chess', cls: 'rule-green' },
+        { text: 'Poetry, Sketch, Guitar / Piano', cls: 'rule-green' },
+        { text: '<b>Fast ends when deep work is done. Then allowed:</b>', cls: '' },
+        { text: 'AI / internet for research or curiosity', cls: 'rule-green' },
+        { text: 'Music & Social media (controlled)', cls: 'rule-green' },
+        { text: 'Messages — only 3 checks: Dhuhr · Maghrib · Isha', cls: 'rule-green' }
+      ]
+    },
+    {
+      title: '🛡️ Firewall Rules',
+      items: [
+        { text: '<b>PMO — Zero tolerance.</b> Not "I\'ll try." Zero. Every slip resets your identity, not just your streak. You are not that person anymore.', cls: 'rule-red' },
+        { text: '<b>Planning instead of acting</b> — Banned from designing new systems or optimizing routines during work hours. Urge to plan = avoidance. Open the task. Do the task.', cls: 'rule-red' },
+        { text: '<b>"I\'ll fix it tomorrow"</b> — Forbidden phrase. Tomorrow Maher does not exist. There is only the next 30 minutes.', cls: 'rule-red' },
+        { text: '<b>Parents</b> — Lower your voice. Respond, don\'t react. This is non-negotiable and connected to your deen.', cls: 'rule-green' }
+      ]
+    },
+    {
+      title: '🧱 The Domino Law',
+      items: [
+        { text: '<b>If one habit breaks — you carry on with everything else.</b>', cls: '' },
+        { text: 'Missing Fajr does not cancel the morning. Missing the shower does not cancel SQL.', cls: '' },
+        { text: 'A fallen domino does not knock the others down unless you let it.', cls: 'rule-green' },
+        { text: 'The shower, the bed, the basics — these are not optional. They are the floor.', cls: 'rule-red' },
+        { text: 'A man who can\'t make his bed cannot build a company.', cls: 'rule-red' }
+      ]
+    }
   ];
+
   const sec = document.getElementById('rules-section');
-  if (sec) sec.innerHTML = rules.map(r => `
-    <div class="rule-card"><div class="rule-card-title">${r.title}</div>${r.items.map(i => `<div class="rule-item ${i.cls||''}"><div class="rule-dot"></div><span>${i.text}</span></div>`).join('')}</div>
+  sec.innerHTML = rules.map(r => `
+    <div class="rule-card">
+      <div class="rule-card-title">${r.title}</div>
+      ${r.items.map(item => `
+        <div class="rule-item ${item.cls || ''}">
+          <div class="rule-dot"></div>
+          <span>${item.text}</span>
+        </div>
+      `).join('')}
+    </div>
   `).join('');
 }
 
 // =============================================
 // EVENTS & TASKS
 // =============================================
+let currentPri = 'med';
+
 function setPri(btn, pri) {
-  selectedPriority = pri;
-  document.querySelectorAll('.pri-btn').forEach(b => { b.className = 'pri-btn'; });
+  currentPri = pri;
+  document.querySelectorAll('.pri-btn').forEach(b => {
+    b.className = 'pri-btn';
+  });
   btn.classList.add(`sel-${pri}`);
 }
 
@@ -2072,9 +2510,10 @@ function addEvent() {
   const time = document.getElementById('ev-time-in').value;
   const dur = parseInt(document.getElementById('ev-dur-in').value) || 60;
   if (!name) return;
+
   userEvents.push({ id: Date.now(), name, time, dur, completed: false, fixed: true });
   document.getElementById('ev-name-in').value = '';
-  AppSync.saveToCloud();
+  saveStorage();
   renderEventsAndTasks();
   buildSchedule();
   updateTasksCount();
@@ -2085,9 +2524,10 @@ function addTask() {
   const dur = parseInt(document.getElementById('task-dur-in').value) || 30;
   const cat = document.getElementById('task-cat-in').value;
   if (!name) return;
-  userTasks.push({ id: Date.now(), name, dur, cat, priority: selectedPriority, completed: false });
+
+  userTasks.push({ id: Date.now(), name, dur, cat, priority: currentPri, completed: false });
   document.getElementById('task-name-in').value = '';
-  AppSync.saveToCloud();
+  saveStorage();
   renderEventsAndTasks();
   buildSchedule();
   updateTasksCount();
@@ -2096,21 +2536,21 @@ function addTask() {
 function toggleEventDone(id) {
   const ev = userEvents.find(e => e.id === id);
   if (ev) ev.completed = !ev.completed;
-  AppSync.saveToCloud();
+  saveStorage();
   renderEventsAndTasks();
 }
 
 function toggleTaskDone(id) {
   const t = userTasks.find(t => t.id === id);
   if (t) t.completed = !t.completed;
-  AppSync.saveToCloud();
+  saveStorage();
   renderEventsAndTasks();
   updateTasksCount();
 }
 
 function removeEvent(id) {
   userEvents = userEvents.filter(e => e.id !== id);
-  AppSync.saveToCloud();
+  saveStorage();
   renderEventsAndTasks();
   buildSchedule();
   updateTasksCount();
@@ -2118,7 +2558,7 @@ function removeEvent(id) {
 
 function removeTask(id) {
   userTasks = userTasks.filter(t => t.id !== id);
-  AppSync.saveToCloud();
+  saveStorage();
   renderEventsAndTasks();
   buildSchedule();
   updateTasksCount();
@@ -2127,8 +2567,11 @@ function removeTask(id) {
 function renderEventsAndTasks() {
   const evList = document.getElementById('events-list');
   const taskList = document.getElementById('tasks-list');
-  if (evList) {
-    evList.innerHTML = userEvents.length === 0 ? '<div class="empty-state">No fixed events today</div>' : userEvents.map(e => `
+
+  if (userEvents.length === 0) {
+    evList.innerHTML = '<div class="empty-state">No fixed events today</div>';
+  } else {
+    evList.innerHTML = userEvents.map(e => `
       <div class="ev-item ${e.completed ? 'completed' : ''}">
         <div class="ev-check ${e.completed ? 'done' : ''}" onclick="toggleEventDone(${e.id})">${e.completed ? '✓' : ''}</div>
         <div class="ev-info">
@@ -2137,10 +2580,14 @@ function renderEventsAndTasks() {
         </div>
         <span class="ev-badge fixed">fixed</span>
         <button class="ev-rm" onclick="removeEvent(${e.id})">×</button>
-      </div>`).join('');
+      </div>
+    `).join('');
   }
-  if (taskList) {
-    taskList.innerHTML = userTasks.length === 0 ? '<div class="empty-state">No tasks added</div>' : userTasks.map(t => `
+
+  if (userTasks.length === 0) {
+    taskList.innerHTML = '<div class="empty-state">No tasks added</div>';
+  } else {
+    taskList.innerHTML = userTasks.map(t => `
       <div class="ev-item ${t.completed ? 'completed' : ''}">
         <div class="ev-check ${t.completed ? 'done' : ''}" onclick="toggleTaskDone(${t.id})">${t.completed ? '✓' : ''}</div>
         <div class="ev-info">
@@ -2149,21 +2596,24 @@ function renderEventsAndTasks() {
         </div>
         <span class="ev-badge ${t.priority === 'high' ? 'high-p' : t.priority === 'med' ? 'med-p' : ''}">${t.priority}</span>
         <button class="ev-rm" onclick="removeTask(${t.id})">×</button>
-      </div>`).join('');
+      </div>
+    `).join('');
   }
 }
 
 function updateTasksCount() {
+  const pending = userTasks.filter(t => !t.completed).length;
+  const done_c = userTasks.filter(t => t.completed).length;
   const el = document.getElementById('tasks-count-label');
-  if (el) el.textContent = `${userTasks.filter(t => !t.completed).length} pending · ${userTasks.filter(t => t.completed).length} done`;
+  if (el) el.textContent = `${pending} pending · ${done_c} done`;
 }
 
 // =============================================
-// AI ADAPT
+// AI ADAPT (Upgraded Prompt & Context)
 // =============================================
 function saveApiKey() {
   apiKey = document.getElementById('api-key-in').value.trim();
-  AppSync.saveToCloud();
+  saveStorage();
   renderApiStatus();
 }
 
@@ -2209,6 +2659,7 @@ async function sendAI() {
   const now = new Date();
   const schedSummary = scheduleBlocks.filter((_, i) => !removed[i]).map(b => `${b.time} — ${b.name} (${b.dur}min)`).join('\n');
   
+  // GATHER ALL CONTEXT
   let engineContext = "No engine data.";
   if (typeof Engine !== 'undefined') {
     engineContext = `Habits: ${(Engine.state.habits||[]).map(x => `${x.name} (Streak:${x.streak}, Status:${x.status||'pending'})`).join(' | ')}`;
@@ -2247,7 +2698,7 @@ IMPORTANT — Your response MUST be valid JSON exactly like this:
 "changes" can be an empty array []. Only suggest valid changes matching his schedule strings perfectly.`;
 
   const payload = { message: fullMsg, systemPrompt };
-  if (typeof apiKey !== 'undefined' && apiKey) payload.apiKey = apiKey; 
+  if (typeof apiKey !== 'undefined' && apiKey) payload.apiKey = apiKey; // SECURE KEY INJECTION
 
   try {
     const response = await fetch("/api/ai", {
@@ -2258,6 +2709,7 @@ IMPORTANT — Your response MUST be valid JSON exactly like this:
     const data = await response.json();
 
     if (!response.ok) { 
+      // Anti-[object Object] parsing
       const errorStr = typeof data.error === 'object' ? JSON.stringify(data.error) : (data.error || 'API Error');
       throw new Error(errorStr); 
     }
@@ -2341,7 +2793,7 @@ function applyAIChanges(btn, changes) {
     }
   }
 
-  AppSync.saveToCloud();
+  saveStorage();
   renderTimeline();
   updateProgress();
 
@@ -2361,12 +2813,230 @@ function appendMsg(type, content) {
   return div;
 }
 
+const originalSwitchTab = function(name, btn) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById(`tab-${name}`).classList.add('active');
+  btn.classList.add('active');
+
+  btn.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+
+  if (name === 'night') renderTaskGroups();
+  if (name === 'events') { renderEventsAndTasks(); updateTasksCount(); }
+  if (name === 'review' && typeof ReviewSystem !== 'undefined') ReviewSystem.generateLocalSummary();
+
+  localStorage.setItem('maher_active_tab', name);
+};
+
+window.switchTab = function(name, btn) {
+  originalSwitchTab(name, btn);
+  if (name === 'revision' && typeof RevisionSystem !== 'undefined') RevisionSystem.renderAll();
+};
+
+// ==========================================
+// PERSONAL DAILY TRACKING ENGINE
+// ==========================================
 // =============================================
-// GROWTH SYSTEM
+// ENGINE (Habits, Streaks & Historical Stats Restored)
 // =============================================
+const Engine = {
+  state: {
+    lastResetDate: '',
+    habits: [
+      { id: 'h1', name: 'Wake up at 6:00 AM', status: null, streak: 0, prevStreak: 0, history: {} },
+      { id: 'h2', name: 'Strategic Game (Chess/Factorio)', status: null, streak: 0, prevStreak: 0, history: {} }
+    ],
+    looksmaxing: [{ id: 'l1', name: 'Morning Skincare Routine', status: null, streak: 0, prevStreak: 0, history: {} }],
+    badHabits: [
+      { id: 'b1', name: 'Mindless Social Media Scrolling', status: null, streak: 0, prevStreak: 0, history: {} },
+      { id: 'b2', name: 'Junk Food', status: null, streak: 0, prevStreak: 0, history: {} }
+    ],
+    prayers: [
+      { id: 'p1', name: 'Fajr', status: null, streak: 0, prevStreak: 0, history: {} },
+      { id: 'p2', name: 'Dhuhr', status: null, streak: 0, prevStreak: 0, history: {} },
+      { id: 'p3', name: 'Asr', status: null, streak: 0, prevStreak: 0, history: {} },
+      { id: 'p4', name: 'Maghrib', status: null, streak: 0, prevStreak: 0, history: {} },
+      { id: 'p5', name: 'Isha', status: null, streak: 0, prevStreak: 0, history: {} }
+    ],
+    diet: [],
+  },
+
+  getLogicalDate() {
+    // 1:00 AM is the cutoff point
+    const d = new Date(Date.now() - 1 * 60 * 60 * 1000);
+    return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+  },
+
+  checkReset() {
+    const currentLogical = this.getLogicalDate();
+    if (!this.state.lastResetDate) {
+      this.state.lastResetDate = currentLogical;
+      return;
+    }
+    if (this.state.lastResetDate !== currentLogical) {
+      this.executeDailyReset(currentLogical);
+    }
+  },
+
+  executeDailyReset(newLogicalDate) {
+    const lists = ['habits', 'looksmaxing', 'badHabits', 'prayers'];
+    const d1 = new Date(this.state.lastResetDate);
+    const d2 = new Date(newLogicalDate);
+    const diffDays = Math.round((d2 - d1) / (1000 * 60 * 60 * 24));
+
+    lists.forEach(key => {
+      (this.state[key] || []).forEach(item => {
+        if (diffDays === 1) {
+          if (item.status !== 'done') item.streak = 0;
+        } else {
+          item.streak = 0;
+        }
+        item.status = null; 
+        item.prevStreak = item.streak;
+      });
+    });
+
+    this.state.diet = [];
+    this.state.lastResetDate = newLogicalDate;
+    this.renderAll();
+    saveStorage();
+  },
+
+  addItem(listKey, inputId) {
+    const input = document.getElementById(inputId);
+    const name = input.value.trim();
+    if (name) {
+      if (!this.state[listKey]) this.state[listKey] = [];
+      this.state[listKey].push({ id: Date.now().toString(), name, status: null, streak: 0, prevStreak: 0, history: {} });
+      input.value = '';
+      this.renderAll();
+      saveStorage();
+    }
+  },
+
+  removeItem(listKey, id) {
+    if (this.state[listKey]) {
+      this.state[listKey] = this.state[listKey].filter(i => i.id !== id);
+      this.renderAll();
+      saveStorage();
+    }
+  },
+
+  logAction(listKey, id, action) {
+    const list = this.state[listKey] || [];
+    const item = list.find(i => i.id === id);
+    if (!item) return;
+
+    if (!item.history) item.history = {};
+    const today = this.getLogicalDate();
+
+    if (action === 'tick') {
+      if (item.status !== 'done') {
+        item.prevStreak = item.streak;
+        item.streak++;
+        item.status = 'done';
+        item.history[today] = 'done';
+      }
+    } else if (action === 'cross') {
+      if (item.status !== 'failed') {
+        item.prevStreak = item.streak;
+        item.streak = 0;
+        item.status = 'failed';
+        item.history[today] = 'failed';
+      }
+    } else if (action === 'undo') {
+      item.streak = item.prevStreak !== undefined ? item.prevStreak : 0;
+      item.status = null;
+      delete item.history[today];
+    }
+    this.renderAll();
+    saveStorage();
+  },
+
+  logDiet() {
+    const time = document.getElementById('diet-time').value;
+    const item = document.getElementById('diet-item').value;
+    if (time && item) {
+      if (!this.state.diet) this.state.diet = [];
+      this.state.diet.push({ time, item });
+      this.state.diet.sort((a,b) => a.time.localeCompare(b.time));
+      document.getElementById('diet-item').value = '';
+      this.renderDiet();
+      saveStorage();
+    }
+  },
+
+  renderAll() {
+    this.renderTrackerList('habits-list', 'habits');
+    this.renderTrackerList('looksmaxing-list', 'looksmaxing');
+    this.renderTrackerList('badHabits-list', 'badHabits');
+    this.renderTrackerList('prayers-list', 'prayers');
+    this.renderDiet();
+  },
+
+  renderTrackerList(containerId, listKey) {
+    const el = document.getElementById(containerId);
+    if (!el) return;
+    const list = this.state[listKey] || [];
+    const currentMonth = this.getLogicalDate().substring(0, 7);
+
+    el.innerHTML = list.map(i => {
+      let monthCount = 0;
+      let totalCount = 0;
+      
+      // Calculate totals based on history log
+      if (i.history) {
+          Object.entries(i.history).forEach(([date, state]) => {
+              if (state === 'done') {
+                  totalCount++;
+                  if (date.startsWith(currentMonth)) monthCount++;
+              }
+          });
+      } else {
+          totalCount = i.status === 'done' ? Math.max(i.streak, 1) : i.streak;
+          monthCount = totalCount;
+      }
+
+      return `
+      <div class="track-row">
+        <div class="track-info">
+          <div class="track-title" style="${i.status === 'done' ? 'text-decoration:line-through; color:var(--text3)' : ''}">${i.name}</div>
+          <div class="track-stats" style="font-family:'DM Mono', monospace; font-size:10px; color:var(--text3); margin-top:6px;">
+            🔥 Streak: <span style="color:var(--gold); font-weight:bold;">${i.streak}</span>
+            <span style="margin:0 6px; color:var(--border2)">|</span>
+            📊 This Month: <span style="color:var(--sky)">${monthCount}</span>
+            <span style="margin:0 6px; color:var(--border2)">|</span>
+            Total: <span style="color:var(--teal)">${totalCount}</span>
+          </div>
+        </div>
+        <div class="track-actions">
+          <button class="btn-check-eng ${i.status === 'done' ? 'done' : ''}" onclick="Engine.logAction('${listKey}', '${i.id}', 'tick')">✓</button>
+          <button class="btn-check-eng ${i.status === 'failed' ? 'fail' : ''}" onclick="Engine.logAction('${listKey}', '${i.id}', 'cross')">✕</button>
+          <button class="btn-check-eng" onclick="Engine.logAction('${listKey}', '${i.id}', 'undo')">↺</button>
+          <button class="btn-check-eng" style="border:none; background:none;" onclick="Engine.removeItem('${listKey}', '${i.id}')">🗑️</button>
+        </div>
+      </div>
+      `;
+    }).join('');
+  },
+
+  renderDiet() {
+    const el = document.getElementById('diet-list');
+    if (!el) return;
+    const list = this.state.diet || [];
+    el.innerHTML = list.length ? list.map(d => `<div style="padding:6px 0;border-bottom:1px solid var(--border2)">[${d.time}] ${d.item}</div>`).join('') : 'No logs today.';
+  }
+};
+
+// ==========================================
+// PREMIUM GROWTH SYSTEM
+// ==========================================
 const GrowthSystem = {
   state: { progress: [], consumption: [] },
-  toggleForm(t) { document.getElementById(`form-${t}`).classList.toggle('open'); },
+  init() { this.renderAll(); },
+  save() { AppSync.saveToCloud(); this.renderAll(); },
+  toggleForm(type) { document.getElementById(`form-${type}`).classList.toggle('open'); },
+
   addProgress() {
     const title = document.getElementById('prog-title').value.trim();
     const cat = document.getElementById('prog-cat').value.trim();
@@ -2376,19 +3046,21 @@ const GrowthSystem = {
       this.state.progress.push({ id: Date.now().toString(), title, cat, cur: 0, total });
       document.getElementById('prog-title').value = '';
       this.toggleForm('progress');
-      this.renderAll();
-      AppSync.saveToCloud();
+      this.save();
     }
   },
   updateProgress(id, val) {
-    const item = (this.state.progress || []).find(i => i.id === id);
-    if (item) { item.cur = Math.max(0, Math.min(item.total, item.cur + val)); this.renderAll(); AppSync.saveToCloud(); }
+    const list = this.state.progress || [];
+    const item = list.find(i => i.id === id);
+    if (item) { item.cur = Math.max(0, Math.min(item.total, item.cur + val)); this.save(); }
   },
-  deleteProgress(id) {
-    this.state.progress = (this.state.progress || []).filter(i => i.id !== id);
-    this.renderAll();
-    AppSync.saveToCloud();
+  deleteProgress(id) { 
+    if (this.state.progress) {
+      this.state.progress = this.state.progress.filter(i => i.id !== id); 
+      this.save(); 
+    }
   },
+
   addConsumption() {
     const title = document.getElementById('cons-title').value.trim();
     const type = document.getElementById('cons-type').value;
@@ -2398,50 +3070,52 @@ const GrowthSystem = {
       this.state.consumption.push({ id: Date.now().toString(), title, type, cur: 0, total, reflection: '', archived: false });
       document.getElementById('cons-title').value = '';
       this.toggleForm('consume');
-      this.renderAll();
-      AppSync.saveToCloud();
+      this.save();
     }
   },
   updateConsProgress(id, val) {
-    const item = (this.state.consumption || []).find(i => i.id === id);
-    if (item && !item.archived) { item.cur = Math.max(0, Math.min(item.total, item.cur + val)); this.renderAll(); AppSync.saveToCloud(); }
+    const list = this.state.consumption || [];
+    const item = list.find(i => i.id === id);
+    if (item && !item.archived) { item.cur = Math.max(0, Math.min(item.total, item.cur + val)); this.save(); }
   },
   updateReflection(id, val) {
-    const item = (this.state.consumption || []).find(i => i.id === id);
-    if (item) { item.reflection = val; AppSync.saveToCloud(); }
+    const list = this.state.consumption || [];
+    const item = list.find(i => i.id === id);
+    if (item) { item.reflection = val; this.save(); }
   },
   archiveConsumption(id) {
-    const item = (this.state.consumption || []).find(i => i.id === id);
-    if (item && item.cur === item.total && item.reflection.length > 10) { item.archived = true; this.renderAll(); AppSync.saveToCloud(); }
+    const list = this.state.consumption || [];
+    const item = list.find(i => i.id === id);
+    if (item && item.cur === item.total && item.reflection.length > 10) { item.archived = true; this.save(); }
   },
-  deleteConsumption(id) {
-    this.state.consumption = (this.state.consumption || []).filter(i => i.id !== id);
-    this.renderAll();
-    AppSync.saveToCloud();
+  deleteConsumption(id) { 
+    if (this.state.consumption) {
+      this.state.consumption = this.state.consumption.filter(i => i.id !== id); 
+      this.save(); 
+    }
   },
+
   renderAll() {
     const pContainer = document.getElementById('growth-progress-list');
-    if (pContainer) {
-      pContainer.innerHTML = (this.state.progress || []).map(p => {
-        const pct = Math.round((p.cur / p.total) * 100);
-        return `
-        <div class="premium-card">
-          <div style="display:flex; justify-content:space-between; align-items:flex-start;">
-            <div><div class="prem-title">${p.title}</div><span class="prem-badge">${p.cat}</span></div>
-            <button class="del-btn" onclick="GrowthSystem.deleteProgress('${p.id}')">✕</button>
+    if (pContainer) pContainer.innerHTML = (this.state.progress || []).map(p => {
+      const pct = Math.round((p.cur / p.total) * 100);
+      return `
+      <div class="premium-card">
+        <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+          <div><div class="prem-title">${p.title}</div><span class="prem-badge">${p.cat}</span></div>
+          <button class="del-btn" onclick="GrowthSystem.deleteProgress('${p.id}')">✕</button>
+        </div>
+        <div class="pg-bg"><div class="pg-fill" style="width:${pct}%"></div></div>
+        <div class="ctrl-row">
+          <span style="font-family:'DM Mono', monospace; font-size:10px; color:var(--text3)">${pct}% COMPLETE</span>
+          <div class="num-ctrl">
+            <button class="num-btn" onclick="GrowthSystem.updateProgress('${p.id}', -1)">-</button>
+            <div class="num-val">${p.cur} / ${p.total}</div>
+            <button class="num-btn" onclick="GrowthSystem.updateProgress('${p.id}', 1)">+</button>
           </div>
-          <div class="pg-bg"><div class="pg-fill" style="width:${pct}%"></div></div>
-          <div class="ctrl-row">
-            <span style="font-family:'DM Mono', monospace; font-size:10px; color:var(--text3)">${pct}% COMPLETE</span>
-            <div class="num-ctrl">
-              <button class="num-btn" onclick="GrowthSystem.updateProgress('${p.id}', -1)">-</button>
-              <div class="num-val">${p.cur} / ${p.total}</div>
-              <button class="num-btn" onclick="GrowthSystem.updateProgress('${p.id}', 1)">+</button>
-            </div>
-          </div>
-        </div>`;
-      }).join('');
-    }
+        </div>
+      </div>`;
+    }).join('');
 
     const actContainer = document.getElementById('growth-consume-active');
     const arcContainer = document.getElementById('growth-consume-archived');
@@ -2473,8 +3147,8 @@ const GrowthSystem = {
         ${isFull && !c.archived ? `
         <div class="reflect-box">
           <div class="sub" style="margin-bottom:6px; color:var(--gold)">Reflection Required</div>
-          <textarea class="vision-area" style="min-height:60px; font-size:13px;" placeholder="What are the key takeaways?" onchange="GrowthSystem.updateReflection('${c.id}', this.value)">${c.reflection || ''}</textarea>
-          ${c.reflection && c.reflection.length > 10 ? `<button class="btn-primary-eng" style="margin-top:8px;" onclick="GrowthSystem.archiveConsumption('${c.id}')">Lock & Archive</button>` : ''}
+          <textarea class="vision-area" style="min-height:60px; font-size:13px; font-family:'DM Sans', sans-serif;" placeholder="What are the key takeaways?" onchange="GrowthSystem.updateReflection('${c.id}', this.value)">${c.reflection}</textarea>
+          ${c.reflection.length > 10 ? `<button class="btn-check-eng done" style="width:100%; margin-top:8px;" onclick="GrowthSystem.archiveConsumption('${c.id}')">Lock & Archive</button>` : ''}
         </div>
         ` : ''}
       </div>`;
@@ -2486,158 +3160,194 @@ const GrowthSystem = {
   }
 };
 
-// =============================================
-// GOALS SYSTEM
-// =============================================
+// ==========================================
+// PREMIUM GOALS SYSTEM
+// ==========================================
 const GoalsSystem = {
   state: { vision: '', goals: [], systems: [] },
-  toggleForm(t) { document.getElementById(`form-${t}`).classList.toggle('open'); },
-  saveVision() { this.state.vision = document.getElementById('vision-text').value; AppSync.saveToCloud(); },
+  
+  init() {
+    const va = document.getElementById('vision-text');
+    if (va) va.value = this.state.vision || '';
+    this.renderAll();
+  },
+  save() { AppSync.saveToCloud(); this.renderAll(); },
+  toggleForm(type) { document.getElementById(`form-${type}`).classList.toggle('open'); },
+  saveVision() { this.state.vision = document.getElementById('vision-text').value; this.save(); },
+
   addGoal() {
     const title = document.getElementById('goal-title').value.trim();
     const why = document.getElementById('goal-why').value.trim();
+    
+    const today = new Date();
+    const dateString = `${today.getFullYear()}-${String(today.getMonth()+1).padStart(2,'0')}-${String(today.getDate()).padStart(2,'0')}`;
+    
     if (title) {
       if (!this.state.goals) this.state.goals = [];
-      this.state.goals.push({ id: Date.now().toString(), title, why, cat: document.getElementById('goal-cat').value, dl: document.getElementById('goal-deadline').value, ms: [] });
+      this.state.goals.push({ 
+        id: Date.now().toString(), 
+        title, 
+        why, 
+        cat: document.getElementById('goal-cat').value, 
+        dl: document.getElementById('goal-deadline').value,
+        createdAt: dateString,
+        ms: [] 
+      });
       document.getElementById('goal-title').value = ''; document.getElementById('goal-why').value = '';
-      this.toggleForm('goal'); this.renderAll(); AppSync.saveToCloud();
+      this.toggleForm('goal'); this.save();
     }
   },
-  deleteGoal(id) { this.state.goals = (this.state.goals || []).filter(g => g.id !== id); this.renderAll(); AppSync.saveToCloud(); },
+  deleteGoal(id) { 
+    if (this.state.goals) {
+      this.state.goals = this.state.goals.filter(g => g.id !== id); 
+      this.save(); 
+    }
+  },
+  
   addMS(gId) {
     const name = prompt("Milestone name:");
-    const g = (this.state.goals || []).find(x => x.id === gId);
-    if (g && name) { if (!g.ms) g.ms = []; g.ms.push({ id: Date.now().toString(), name, done: false }); this.renderAll(); AppSync.saveToCloud(); }
+    const list = this.state.goals || [];
+    const g = list.find(x => x.id === gId);
+    if (g && name) { 
+      if (!g.ms) g.ms = [];
+      g.ms.push({ id: Date.now().toString(), name, done: false }); 
+      this.save(); 
+    }
   },
   toggleMS(gId, msId) {
-    const g = (this.state.goals || []).find(x => x.id === gId);
-    if (g && g.ms) { const ms = g.ms.find(m => m.id === msId); if (ms) ms.done = !ms.done; this.renderAll(); AppSync.saveToCloud(); }
+    const list = this.state.goals || [];
+    const g = list.find(x => x.id === gId);
+    if (g && g.ms) { 
+      const ms = g.ms.find(m => m.id === msId); 
+      if (ms) ms.done = !ms.done; 
+      this.save(); 
+    }
   },
+
   addSystem() {
     const title = document.getElementById('sys-title').value.trim();
-    if (title) {
+    if (title) { 
       if (!this.state.systems) this.state.systems = [];
-      this.state.systems.push({ id: Date.now().toString(), title, streak: 0, doneToday: false });
-      document.getElementById('sys-title').value = '';
-      this.renderAll(); AppSync.saveToCloud();
+      this.state.systems.push({ id: Date.now().toString(), title, streak: 0, doneToday: false }); 
+      document.getElementById('sys-title').value=''; 
+      this.save(); 
     }
   },
   toggleSystem(id) {
-    const sys = (this.state.systems || []).find(s => s.id === id);
-    if (sys) { sys.doneToday = !sys.doneToday; sys.streak += sys.doneToday ? 1 : -1; this.renderAll(); AppSync.saveToCloud(); }
+    const list = this.state.systems || [];
+    const sys = list.find(x => x.id === id);
+    if (sys) { sys.doneToday = !sys.doneToday; if(sys.doneToday) sys.streak++; else sys.streak = Math.max(0, sys.streak - 1); this.save(); }
   },
+  deleteSystem(id) { 
+    if (this.state.systems) {
+      this.state.systems = this.state.systems.filter(s => s.id !== id); 
+      this.save(); 
+    }
+  },
+
+  getCountdownText(createdAt, dlStr) {
+    if (!createdAt) return ''; 
+    let daysTotal = 0;
+    if (dlStr === '1 Week') daysTotal = 7;
+    else if (dlStr === '1 Month') daysTotal = 30;
+    else if (dlStr === '3 Months') daysTotal = 90;
+    else if (dlStr === '6 Months') daysTotal = 180;
+    else if (dlStr === '1 Year') daysTotal = 365;
+    else return '';
+
+    const today = new Date();
+    today.setHours(0,0,0,0);
+    const start = new Date(createdAt + 'T00:00:00');
+    start.setDate(start.getDate() + daysTotal);
+    
+    const diffTime = start - today;
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    
+    if (diffDays > 0) {
+      return `<span style="font-family:'DM Mono', monospace; font-size:10px; color:var(--text2); align-self:center; font-weight:500;">${diffDays} days remaining</span>`;
+    } else if (diffDays === 0) {
+      return `<span style="font-family:'DM Mono', monospace; font-size:10px; color:var(--rose); align-self:center; font-weight:bold;">Time's up today</span>`;
+    } else {
+      return `<span style="font-family:'DM Mono', monospace; font-size:10px; color:var(--rose); align-self:center; font-weight:bold;">Time's up ${Math.abs(diffDays)} days ago</span>`;
+    }
+  },
+
   renderAll() {
-    const va = document.getElementById('vision-text');
-    if (va) va.value = this.state.vision || '';
     const gContainer = document.getElementById('goals-list-premium');
     if (gContainer) {
       gContainer.innerHTML = (this.state.goals || []).map(g => {
         const msList = g.ms || [];
-        const pct = msList.length === 0 ? 0 : Math.round((msList.filter(m=>m.done).length / msList.length) * 100);
+        const tMs = msList.length; const cMs = msList.filter(m=>m.done).length;
+        const pct = tMs === 0 ? 0 : Math.round((cMs / tMs) * 100);
+        
+        if (!g.createdAt) {
+          const today = new Date();
+          g.createdAt = `${today.getFullYear()}-${String(today.getMonth()+1).padStart(2,'0')}-${String(today.getDate()).padStart(2,'0')}`;
+        }
+        
+        const countdownHtml = this.getCountdownText(g.createdAt, g.dl);
+
         return `
         <div class="premium-card">
           <div style="display:flex; justify-content:space-between; align-items:flex-start;">
-            <div><div class="prem-title">${g.title}</div><span class="prem-badge">${g.cat}</span><span class="prem-badge" style="margin-left:6px; color:var(--gold)">${g.dl}</span></div>
+            <div>
+              <div class="prem-title">${g.title}</div>
+              <div style="display:flex; gap:6px; margin-bottom:8px; align-items:center;">
+                <span class="prem-badge">${g.cat}</span>
+                <span class="prem-badge" style="border-color:var(--gold-dim); color:var(--gold)">${g.dl}</span>
+                ${countdownHtml}
+              </div>
+            </div>
             <button class="del-btn" onclick="GoalsSystem.deleteGoal('${g.id}')">✕</button>
           </div>
-          <div style="font-size:12px; color:var(--text2); margin-top:8px;">"${g.why}"</div>
+          ${g.why ? `<div class="sub" style="text-transform:none; margin-bottom:12px; color:var(--text2)">"${g.why}"</div>` : ''}
           <div class="pg-bg"><div class="pg-fill" style="width:${pct}%"></div></div>
-          <div>
+          <div style="margin-top:12px;">
             ${msList.map(m => `
               <div class="milestone-item" onclick="GoalsSystem.toggleMS('${g.id}', '${m.id}')">
                 <div class="ms-check ${m.done ? 'done' : ''}">✓</div>
                 <div class="ms-text">${m.name}</div>
-              </div>`).join('')}
-            <button class="ghost-btn" style="margin-top:8px;" onclick="GoalsSystem.addMS('${g.id}')">+ Add Milestone</button>
+              </div>
+            `).join('')}
+            <button class="ghost-btn" style="margin-top:8px; border-style:dotted;" onclick="GoalsSystem.addMS('${g.id}')">+ Add Milestone</button>
           </div>
         </div>`;
       }).join('');
     }
+
     const sContainer = document.getElementById('systems-list-premium');
     if (sContainer) {
       sContainer.innerHTML = (this.state.systems || []).map(s => `
         <div class="track-row" style="margin: 0 16px;">
           <div class="track-info">
-            <div class="track-title" style="${s.doneToday ? 'text-decoration:line-through; color:var(--text3)' : ''}">${s.title}</div>
+            <div class="track-title" style="${s.doneToday ? 'color:var(--text3); text-decoration:line-through' : ''}">${s.title}</div>
             <div class="track-streak">🔥 Streak: ${s.streak}</div>
           </div>
-          <button class="btn-check-eng ${s.doneToday ? 'done' : ''}" onclick="GoalsSystem.toggleSystem('${s.id}')">✓</button>
-        </div>`).join('');
-    }
-  }
-};
-
-// =============================================
-// REVISION SYSTEM
-// =============================================
-const RevisionSystem = {
-  state: { items: [] },
-  intervals: [0, 1, 3, 7, 14, 30, 60],
-  ranks: ['NPC', 'Novice', 'Skilled', 'Sigma', 'Top G', 'Demigod', 'CHAD (Mastered)'],
-  addItem() {
-    const topic = document.getElementById('srs-topic').value.trim();
-    const subject = document.getElementById('srs-subject').value.trim() || 'General';
-    if (topic) {
-      const d = new Date();
-      const dateString = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
-      if (!this.state.items) this.state.items = [];
-      this.state.items.push({ id: Date.now().toString(), topic, subject, stage: 0, nextReviewDate: dateString });
-      document.getElementById('srs-topic').value = ''; document.getElementById('srs-subject').value = '';
-      this.renderAll(); AppSync.saveToCloud();
-    }
-  },
-  completeItem(id) {
-    const item = (this.state.items || []).find(i => i.id === id);
-    if (item && item.stage < 6) {
-      item.stage++;
-      const nextDate = new Date();
-      nextDate.setDate(nextDate.getDate() + this.intervals[item.stage]);
-      item.nextReviewDate = `${nextDate.getFullYear()}-${String(nextDate.getMonth()+1).padStart(2,'0')}-${String(nextDate.getDate()).padStart(2,'0')}`;
-      this.renderAll(); AppSync.saveToCloud();
-    }
-  },
-  deleteItem(id) { this.state.items = (this.state.items || []).filter(i => i.id !== id); this.renderAll(); AppSync.saveToCloud(); },
-  renderAll() {
-    const pendingContainer = document.getElementById('srs-pending-list');
-    const vaultContainer = document.getElementById('srs-vault-list');
-    if (!pendingContainer || !vaultContainer) return;
-
-    let pendingHTML = '', vaultHTML = '';
-    const today = new Date(); today.setHours(0,0,0,0);
-
-    (this.state.items || []).forEach(item => {
-      const target = new Date(item.nextReviewDate + 'T00:00:00');
-      const daysDiff = Math.ceil((target - today) / (1000 * 60 * 60 * 24));
-      const isPending = daysDiff <= 0 && item.stage < 6;
-      const rank = this.ranks[item.stage];
-
-      const html = `
-        <div class="track-row" style="background:var(--surface2); border-radius:8px; margin: 0 16px 8px; padding:12px 16px; border:1px solid var(--border)">
-          <div class="track-info">
-            <div style="display:flex; align-items:center; gap:8px;">
-              <div class="track-title">${item.topic}</div><span class="prem-badge">${item.subject}</span>
-            </div>
-            <div style="font-family:'DM Mono'; font-size:10px; color:var(--text3); margin-top:4px;">Rank: ${rank} | Stage ${item.stage}</div>
-          </div>
           <div class="track-actions">
-            ${isPending ? `<button class="btn-check-eng done" onclick="RevisionSystem.completeItem('${item.id}')">✓</button>` : ''}
-            <button class="btn-check-eng" style="border:none;" onclick="RevisionSystem.deleteItem('${item.id}')">🗑️</button>
+            <button class="btn-check-eng ${s.doneToday ? 'done' : ''}" onclick="GoalsSystem.toggleSystem('${s.id}')">${s.doneToday ? '✓' : ''}</button>
+            <button class="btn-check-eng" style="border:none; background:none; font-size:16px; width:24px; padding:0" onclick="GoalsSystem.deleteSystem('${s.id}')">🗑️</button>
           </div>
-        </div>`;
-      if (isPending) pendingHTML += html; else vaultHTML += html;
-    });
-
-    pendingContainer.innerHTML = pendingHTML || '<div class="empty-state">No reviews due.</div>';
-    vaultContainer.innerHTML = vaultHTML || '<div class="empty-state">Vault is empty.</div>';
+        </div>
+      `).join('');
+    }
   }
 };
 
-// =============================================
-// REVIEW SYSTEM
-// =============================================
+// ==========================================
+// PREMIUM REVIEW SYSTEM (Upgraded AI Logic)
+// ==========================================
 const ReviewSystem = {
   state: { journal: { well: '', waste: '', improve: '' }, ratings: { focus: 0, disc: 0, energy: 0 } },
-  init() { this.renderRatings(); },
+
+  init() {
+    ['well', 'waste', 'improve'].forEach(k => {
+      const el = document.getElementById(`j-${k}`);
+      if (el) el.value = (this.state.journal && this.state.journal[k]) || '';
+    });
+    this.renderRatings();
+    this.generateLocalSummary();
+  },
+
   saveJournal() {
     this.state.journal = {
       well: document.getElementById('j-well').value,
@@ -2646,12 +3356,14 @@ const ReviewSystem = {
     };
     AppSync.saveToCloud();
   },
-  rate(cat, val) { 
+
+  rate(category, val) {
     if (!this.state.ratings) this.state.ratings = {};
-    this.state.ratings[cat] = val; 
-    this.renderRatings(); 
-    AppSync.saveToCloud(); 
+    this.state.ratings[category] = val;
+    AppSync.saveToCloud();
+    this.renderRatings();
   },
+
   renderRatings() {
     ['focus', 'disc', 'energy'].forEach(cat => {
       const container = document.getElementById(`rate-${cat}`);
@@ -2661,26 +3373,225 @@ const ReviewSystem = {
         <div class="ms-check ${i <= cur ? 'done' : ''}" style="border-radius:50%; width:20px; height:20px;" onclick="ReviewSystem.rate('${cat}', ${i})"></div>
       `).join('');
     });
-    this.generateLocalSummary();
   },
+
   generateLocalSummary() {
-    const total = scheduleBlocks.filter((_, i) => !removed[i]).length;
-    const doneC = scheduleBlocks.filter((_, i) => !removed[i] && done[i]).length;
-    const pct = total > 0 ? Math.round(doneC / total * 100) : 0;
-    
-    let habitsDone = 0;
-    if (typeof Engine !== 'undefined' && Engine.state.habits) {
-      habitsDone = Engine.state.habits.filter(h => h.status === 'done').length;
+    const actBlocks = typeof scheduleBlocks !== 'undefined' ? scheduleBlocks.filter((_, i) => typeof removed !== 'undefined' && !removed[i]) : [];
+    const doneBlocks = typeof done !== 'undefined' ? done.filter((d, i) => d && !removed[i]).length : 0;
+    const schedPct = actBlocks.length ? Math.round((doneBlocks / actBlocks.length) * 100) : 0;
+
+    let eHabits = 0, ePrayers = 0;
+    if (typeof Engine !== 'undefined') {
+      eHabits = (Engine.state.habits || []).filter(h=>h.status==='done').length;
+      ePrayers = (Engine.state.prayers || []).filter(p=>p.status==='done').length;
     }
 
-    const grid = document.getElementById('review-stats-grid');
-    if (grid) {
-      grid.innerHTML = `
-        <div class="stat-box"><div class="stat-num">${pct}%</div><div class="stat-label">Schedule Exec</div></div>
-        <div class="stat-box"><div class="stat-num">${habitsDone}</div><div class="stat-label">Core Habits</div></div>`;
+    const stEl = document.getElementById('review-stats-grid');
+    if (stEl) {
+      stEl.innerHTML = `
+        <div class="stat-box"><div class="stat-num">${schedPct}%</div><div class="stat-label">Schedule Exec</div></div>
+        <div class="stat-box"><div class="stat-num">${ePrayers}/5</div><div class="stat-label">Prayers Logged</div></div>
+        <div class="stat-box"><div class="stat-num">${eHabits}</div><div class="stat-label">Habits Done</div></div>
+        <div class="stat-box"><div class="stat-num">${doneBlocks}</div><div class="stat-label">Blocks Crushed</div></div>
+      `;
     }
+
+    const insEl = document.getElementById('review-insights-box');
+    if (insEl) {
+      let insights = [];
+      if (schedPct >= 80) insights.push("🔥 Exceptional schedule adherence today. You executed the plan perfectly.");
+      if (schedPct < 40 && actBlocks.length > 0) insights.push("⚠️ Low completion rate. Let's rely on the systems tomorrow, not motivation.");
+      if (ePrayers === 5) insights.push("🕌 Perfect prayer attendance. The spiritual anchor is holding strong.");
+      
+      insEl.innerHTML = insights.length > 0 
+        ? insights.map(i => `<div class="insight-p">${i}</div>`).join('') 
+        : `<div class="insight-p" style="color:var(--text3); border-color:var(--border2)">Not enough data yet. Complete your schedule to generate insights.</div>`;
+    }
+  },
+
+  async generateAIReview() {
+    const btn = document.getElementById('btn-generate-ai-review');
+    const out = document.getElementById('ai-review-output');
+    btn.innerText = "Analyzing your day...";
+    btn.disabled = true;
+    out.style.display = 'block';
+    out.innerHTML = '<span class="spinner"></span> Compiling full system data...';
+
+    const actBlocks = typeof scheduleBlocks !== 'undefined' ? scheduleBlocks.filter((_, i) => typeof removed !== 'undefined' && !removed[i]) : [];
+    const doneBlocks = typeof done !== 'undefined' ? done.filter((d, i) => d && !removed[i]) : [];
+    const missedBlocks = actBlocks.filter((b, i) => !done[scheduleBlocks.indexOf(b)]);
+    
+    let engineStats = "No engine data.";
+    if (typeof Engine !== 'undefined') {
+      const getS = (arr) => (arr && arr.length > 0) ? arr.map(x => `${x.name} (Streak:${x.streak}, Status:${x.status||'missed'})`).join(' | ') : 'None';
+      engineStats = `Habits: ${getS(Engine.state.habits)}\nLooksmaxing: ${getS(Engine.state.looksmaxing)}\nPrayers: ${getS(Engine.state.prayers)}\nBad Habits: ${getS(Engine.state.badHabits)}`;
+    }
+
+    let goalsStats = "No active goals.";
+    if (typeof GoalsSystem !== 'undefined') {
+      goalsStats = (GoalsSystem.state.goals || []).map(g => `${g.title} (${(g.ms || []).filter(m=>m.done).length}/${(g.ms || []).length} milestones)`).join(' | ');
+    }
+
+    const journal = this.state.journal || {};
+    const msg = `
+      Schedule Completion: ${doneBlocks.length}/${actBlocks.length}
+      Missed Schedule Blocks: ${missedBlocks.map(b=>b.name).join(', ')}
+      Engine Status:\n${engineStats}
+      Goals Progress: ${goalsStats}
+      Journal Well: ${journal.well || 'N/A'}
+      Journal Waste: ${journal.waste || 'N/A'}
+      Journal Improve: ${journal.improve || 'N/A'}
+    `;
+
+    const systemPrompt = `You are an elite, uncompromising, yet deeply motivating mentor for Maher. Evaluate his daily execution with 100% accuracy.
+You must cross-reference his schedule completion with his habit streaks. 
+If you see he skipped a critical habit (like Gym, Skincare, or Deep Work) and his streak is at 0, call it out directly. Explain the strict downstream consequences (e.g., "Skipping the gym ruins your looksmaxing and energy levels; you are drifting").
+Acknowledge wins heavily. Tell him exactly what to keep doing, what to stop, and what to change based on his "Journal Waste" and "Journal Improve" entries.
+Return ONLY markdown formatting. No pleasantries outside the mentor persona.`;
+
+    const payload = { message: msg, systemPrompt };
+    if (typeof apiKey !== 'undefined' && apiKey) payload.apiKey = apiKey;
+
+    try {
+      const response = await fetch("/api/ai", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
+      });
+      const data = await response.json();
+      
+      if (!response.ok) {
+        const errorStr = typeof data.error === 'object' ? JSON.stringify(data.error) : (data.error || 'API Error');
+        throw new Error(errorStr);
+      }
+      
+      let text = data.reply || '';
+      text = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>').replace(/\n/g, '<br>');
+      out.innerHTML = text;
+    } catch(e) {
+      out.innerHTML = `<span style="color:var(--rose)">Failed to generate: ${e.message}</span>`;
+    }
+    btn.innerText = "Generate AI Review";
+    btn.disabled = false;
   }
 };
+
+// ==========================================
+// REVISION SYSTEM (Spaced Repetition)
+// ==========================================
+const RevisionSystem = {
+  state: { items: [] },
+  intervals: [0, 1, 3, 7, 14, 30, 60],
+  ranks: ['NPC', 'Novice', 'Skilled', 'Sigma', 'Top G', 'Demigod', 'CHAD (Mastered)'],
+
+  init() { this.renderAll(); },
+  save() { AppSync.saveToCloud(); this.renderAll(); },
+
+  addItem() {
+    const topic = document.getElementById('srs-topic').value.trim();
+    const subject = document.getElementById('srs-subject').value.trim() || 'General';
+    if (!topic) return;
+
+    const today = new Date();
+    const dateString = `${today.getFullYear()}-${String(today.getMonth()+1).padStart(2,'0')}-${String(today.getDate()).padStart(2,'0')}`;
+
+    if (!this.state.items) this.state.items = [];
+    this.state.items.push({ id: Date.now().toString(), topic, subject, stage: 0, nextReviewDate: dateString });
+
+    document.getElementById('srs-topic').value = '';
+    document.getElementById('srs-subject').value = '';
+    this.save();
+  },
+
+  completeItem(id) {
+    const list = this.state.items || [];
+    const item = list.find(i => i.id === id);
+    if (!item) return;
+
+    if (item.stage < 6) item.stage++;
+    const daysToAdd = this.intervals[item.stage];
+    const nextDate = new Date();
+    nextDate.setDate(nextDate.getDate() + daysToAdd);
+    item.nextReviewDate = `${nextDate.getFullYear()}-${String(nextDate.getMonth()+1).padStart(2,'0')}-${String(nextDate.getDate()).padStart(2,'0')}`;
+
+    this.save();
+  },
+
+  deleteItem(id) {
+    if (this.state.items) {
+      this.state.items = this.state.items.filter(i => i.id !== id);
+      this.save();
+    }
+  },
+
+  getDaysDifference(dateString) {
+    const today = new Date();
+    today.setHours(0,0,0,0);
+    const target = new Date(dateString + 'T00:00:00');
+    return Math.ceil((target - today) / (1000 * 60 * 60 * 24));
+  },
+
+  renderAll() {
+    const pendingContainer = document.getElementById('srs-pending-list');
+    const vaultContainer = document.getElementById('srs-vault-list');
+    if (!pendingContainer || !vaultContainer) return;
+
+    let pendingHTML = '', vaultHTML = '';
+
+    (this.state.items || []).forEach(item => {
+      const daysDiff = this.getDaysDifference(item.nextReviewDate);
+      const isPending = daysDiff <= 0 && item.stage < 6;
+      const rank = this.ranks[item.stage];
+
+      let dueText = '';
+      if (item.stage === 6) dueText = '<span style="color:var(--teal)">Mastered</span>';
+      else if (daysDiff < 0) dueText = `<span style="color:var(--rose); font-weight:bold;">Due ${Math.abs(daysDiff)} days ago</span>`;
+      else if (daysDiff === 0) dueText = '<span style="color:var(--gold)">Due Today</span>';
+      else dueText = `Due in ${daysDiff} days`;
+
+      const html = `
+        <div class="track-row" style="background:var(--surface2); border-radius:8px; margin: 0 16px 8px; padding:12px 16px; border:1px solid var(--border)">
+          <div class="track-info">
+            <div style="display:flex; align-items:center; gap:8px; margin-bottom:4px;">
+              <div class="track-title">${item.topic}</div>
+              <span class="prem-badge">${item.subject}</span>
+            </div>
+            <div style="font-family:'DM Mono', monospace; font-size:10px; color:var(--text3);">
+              Rank: <span style="color:var(--gold2)">${rank}</span> | ${dueText}
+            </div>
+          </div>
+          <div class="track-actions">
+            ${isPending ? `<button class="btn-check-eng done" onclick="RevisionSystem.completeItem('${item.id}')">✓</button>` : ''}
+            <button class="btn-check-eng" style="border:none; background:none; font-size:16px; width:24px; padding:0" onclick="RevisionSystem.deleteItem('${item.id}')">🗑️</button>
+          </div>
+        </div>
+      `;
+
+      if (isPending) pendingHTML += html;
+      else vaultHTML += html;
+    });
+
+    pendingContainer.innerHTML = pendingHTML || '<div class="empty-state">No pending reviews. Good job!</div>';
+    vaultContainer.innerHTML = vaultHTML || '<div class="empty-state">Vault is quiet.</div>';
+  }
+};
+
+// ==========================================
+// COMPASS DOMAIN TOGGLE FUNCTIONS
+// ==========================================
+function toggleCompassDomain(el) {
+  el.classList.toggle('open');
+}
+
+var compassAllOpen = false;
+function toggleAllCompassDomains() {
+  compassAllOpen = !compassAllOpen;
+  document.querySelectorAll('.compass .domain').forEach(function(d) {
+    if (compassAllOpen) d.classList.add('open');
+    else d.classList.remove('open');
+  });
+  document.querySelector('.compass .expand-all').textContent = compassAllOpen ? 'collapse all' : 'expand all';
+}
 </script>
 </body>
 </html>
